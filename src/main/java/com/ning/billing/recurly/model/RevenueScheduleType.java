@@ -16,6 +16,8 @@
  */
 package com.ning.billing.recurly.model;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum RevenueScheduleType {
     NEVER("never"),
     EVENLY("evenly"),
@@ -29,6 +31,7 @@ public enum RevenueScheduleType {
         this.type = type;
     }
 
+    @JsonValue
     public String getType() {
         return type;
     }

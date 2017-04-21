@@ -17,13 +17,13 @@
 
 package com.ning.billing.recurly.model;
 
+import com.google.common.base.Objects;
+import org.joda.time.DateTime;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-
-import org.joda.time.DateTime;
-import com.google.common.base.Objects;
 
 @XmlRootElement(name = "plan")
 public class Plan extends RecurlyObject {
@@ -101,7 +101,18 @@ public class Plan extends RecurlyObject {
     @XmlElement(name = "setup_fee_in_cents")
     private RecurlyUnitCurrency setupFeeInCents;
 
-    //Getters and Setters
+    //newly added block of code
+    @XmlElement(name = "total_billing_cycles")
+    private String totalBillingCycles;
+
+    @XmlElement(name = "setup_fee_accounting_code")
+    private String setupFeeAccountingCode;
+
+    @XmlElement(name = "tax_code")
+    private TaxCode taxCode;
+
+    @XmlElement(name = "tax_exempt")
+    private Boolean taxExempt;
 
     public String getPlanCode() {
         return planCode;
@@ -287,6 +298,41 @@ public class Plan extends RecurlyObject {
         this.revenueScheduleType = RevenueScheduleType.valueOf(revenueScheduleType.toUpperCase());
     }
 
+    //newly added block of code
+    public String getSetupFeeAccountingCode() {
+        return setupFeeAccountingCode;
+    }
+
+    public void setSetupFeeAccountingCode(String setupFeeAccountingCode) {
+        this.setupFeeAccountingCode = setupFeeAccountingCode;
+    }
+
+    public String getTotalBillingCycles() {
+        return totalBillingCycles;
+    }
+
+    public void setTotalBillingCycles(String totalBillingCycles) {
+        this.totalBillingCycles = totalBillingCycles;
+    }
+
+    public TaxCode getTaxCode() {
+        return taxCode;
+    }
+
+    public void setTaxCode(final String taxCode) {
+        this.taxCode = TaxCode.valueOf(taxCode.toUpperCase());
+    }
+
+
+
+    public Boolean getTaxExempt() {
+        return taxExempt;
+    }
+
+    public void setTaxExempt(final Object taxExempt) {
+        this.taxExempt = booleanOrNull(taxExempt);
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
@@ -308,6 +354,13 @@ public class Plan extends RecurlyObject {
         sb.append(", trialIntervalUnit='").append(trialIntervalUnit).append('\'');
         sb.append(", trialRequiresBillingInfo='").append(trialRequiresBillingInfo).append('\'');
         sb.append(", accountingCode='").append(accountingCode).append('\'');
+
+        //newly added
+        sb.append(", setUpFeeAccountingCode=").append(accountingCode).append('\'');
+        sb.append(", totalBillingCycles='").append(totalBillingCycles).append('\'');
+        sb.append(", taxCode='").append(taxCode).append('\'');
+        sb.append(", taxExempt=").append(taxExempt);
+
         sb.append(", createdAt=").append(createdAt);
         sb.append(", updatedAt=").append(updatedAt);
         sb.append(", unitAmountInCents=").append(unitAmountInCents);
@@ -394,6 +447,22 @@ public class Plan extends RecurlyObject {
         if (updatedAt != null ? updatedAt.compareTo(plan.updatedAt) != 0: plan.updatedAt != null) {
             return false;
         }
+        //newly added
+        if (setupFeeAccountingCode != null ? !setupFeeAccountingCode.equals(plan.setupFeeAccountingCode) : plan.setupFeeAccountingCode != null) {
+            return false;
+        }
+
+        if (totalBillingCycles != null ? !totalBillingCycles.equals(plan.totalBillingCycles) : plan.totalBillingCycles != null) {
+            return false;
+        }
+
+        if (taxCode != null ? !taxCode.equals(plan.taxCode) : plan.taxCode != null) {
+            return false;
+        }
+
+        if (taxExempt != null ? !taxExempt.equals(plan.taxExempt) : plan.taxExempt != null) {
+            return false;
+        }
 
         return true;
     }
@@ -423,7 +492,11 @@ public class Plan extends RecurlyObject {
                 setupFeeInCents,
                 revenueScheduleType,
                 setupFeeRevenueScheduleType,
-                trialRequiresBillingInfo
+                trialRequiresBillingInfo,
+                setupFeeAccountingCode,
+                totalBillingCycles,
+                taxCode,
+                taxExempt
         );
     }
 }
