@@ -101,6 +101,8 @@ public class Plan extends RecurlyObject {
     @XmlElement(name = "setup_fee_in_cents")
     private RecurlyUnitCurrency setupFeeInCents;
 
+    //Getters and Setters
+
     public String getPlanCode() {
         return planCode;
     }
