@@ -15,6 +15,7 @@
  * under the License.
  */
 
+
 package com.ning.billing.recurly.model;
 
 import com.google.common.base.Objects;
@@ -24,6 +25,14 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+/*
+Newly added fields:
+    total_billing_cycles
+    setup_fee_accounting_code
+    tax_code
+    tax_exempt
+ */
 
 @XmlRootElement(name = "plan")
 public class Plan extends RecurlyObject {

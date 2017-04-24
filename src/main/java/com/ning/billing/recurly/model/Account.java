@@ -18,15 +18,23 @@
 package com.ning.billing.recurly.model;
 
 import com.google.common.base.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.joda.time.DateTime;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.joda.time.DateTime;
+/*
+newly added fields:
+    vat_number
+    entity_use_code
+    account_acquisition
+    cc_emails
+ */
 
 @XmlRootElement(name = "account")
 public class Account extends RecurlyObject {
@@ -113,6 +121,19 @@ public class Account extends RecurlyObject {
 
     @XmlElement(name = "has_past_due_invoice")
     private Boolean hasPastDueInvoice;
+
+    @XmlElement(name = "vat_number")
+    private String vatNumber;
+
+    @XmlElement(name = "entity_use_code")
+    private String entityUseCode;
+
+    @XmlElement(name = "account_acquisition")
+    private AccountAcquisition accountAcquisition;
+
+    @XmlElement(name = "cc_emails")
+    private List<String> ccEmails;
+
 
     @Override
     public void setHref(final Object href) {
