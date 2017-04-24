@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -148,6 +149,8 @@ public class Account extends RecurlyObject {
             }
         }
     }
+
+
 
     public Address getAddress() {
         return address;
@@ -340,6 +343,46 @@ public class Account extends RecurlyObject {
     public void setShippingAddresses(final ShippingAddresses shippingAddresses) {
         this.shippingAddresses = shippingAddresses;
     }
+
+    public String getVatNumber() {
+        return vatNumber;
+    }
+
+    public void setVatNumber(final Object vatNumber) {
+        this.vatNumber = stringOrNull(vatNumber);
+    }
+
+    public String getEntityUseCode() {
+        return entityUseCode;
+    }
+
+    public void setEntityUseCode(final Object entityUseCode) {
+        this.entityUseCode = stringOrNull(entityUseCode);
+    }
+
+    public AccountAcquisition getAccountAcquisition() {
+        return accountAcquisition;
+    }
+
+    public void setAccountAcquisition(AccountAcquisition accountAcquisition) {
+        this.accountAcquisition = accountAcquisition;
+    }
+
+    public List<String> getCcEmails() {
+        return ccEmails;
+    }
+
+
+    //check if this is the right way to provide the setter
+    public void setCcEmails(final List<Object> ccEmails){
+
+        Iterator<Object> ccEmailsIterator = ccEmails.iterator();
+
+        while(ccEmailsIterator.hasNext()){
+            this.ccEmails.add(String.valueOf(ccEmailsIterator.next()));
+        }
+    }
+
 
     @Override
     public String toString() {
