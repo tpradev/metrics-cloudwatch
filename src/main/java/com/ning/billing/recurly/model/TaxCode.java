@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public enum TaxCode {
 
-
     UNKNOWN("unknown"),
     PHYSICAL("physical"),
     DIGITAL("digital");

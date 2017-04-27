@@ -53,16 +53,17 @@ public class AccountAcquisition extends RecurlyObject{
         return currency;
     }
 
-    public void setCurrency(final com.ning.billing.recurly.model.Currency currency){
-        this.currency = currency;
+
+    public void setCurrency(final String currency){
+        this.currency = Currency.valueOf(currency);
     }
 
     public Channel getChannel(){
         return channel;
     }
 
-    public void setChannel(final Channel channel){
-        this.channel =  channel;
+    public void setChannel(final String channel){
+        this.channel =  Channel.valueOf(channel);
     }
 
     public String getSubchannel(){

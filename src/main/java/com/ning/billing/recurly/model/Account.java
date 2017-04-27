@@ -24,8 +24,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import java.util.Iterator;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -126,6 +124,7 @@ public class Account extends RecurlyObject {
     @XmlElement(name = "vat_number")
     private String vatNumber;
 
+    //todo - recurly does not send entity use code in the response. Check if this fields needs to be included
     @XmlElement(name = "entity_use_code")
     private String entityUseCode;
 
@@ -133,7 +132,7 @@ public class Account extends RecurlyObject {
     private AccountAcquisition accountAcquisition;
 
     @XmlElement(name = "cc_emails")
-    private List<String> ccEmails;
+    private String ccEmails;
 
 
     @Override
@@ -368,20 +367,14 @@ public class Account extends RecurlyObject {
         this.accountAcquisition = accountAcquisition;
     }
 
-    public List<String> getCcEmails() {
+    public String getCcEmails() {
         return ccEmails;
     }
 
 
-    //check if this is the right way to provide the setter
-    public void setCcEmails(final List<Object> ccEmails){
-
-        Iterator<Object> ccEmailsIterator = ccEmails.iterator();
-
-        while(ccEmailsIterator.hasNext()){
-            this.ccEmails.add(String.valueOf(ccEmailsIterator.next()));
-        }
-    }
+   public void setCcEmails(final Object ccEmails){
+        this.ccEmails = stringOrNull(ccEmails);
+   }
 
 
     @Override

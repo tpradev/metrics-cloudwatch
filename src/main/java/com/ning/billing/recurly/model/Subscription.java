@@ -17,17 +17,25 @@
 
 package com.ning.billing.recurly.model;
 
+import com.google.common.base.Objects;
+import org.joda.time.DateTime;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlList;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import org.joda.time.DateTime;
-
-import com.google.common.base.Objects;
-
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.List;
+
+/*
+newly added fields:
+    totalBillingCycles
+    vatReverseChargeNotes
+    bankAccountAuthorizedAt
+    redemptionCode
+
+ */
 
 @XmlRootElement(name = "subscription")
 public class Subscription extends AbstractSubscription {
@@ -141,6 +149,18 @@ public class Subscription extends AbstractSubscription {
 
     @XmlElement(name = "shipping_address_id")
     private Long shippingAddressId;
+
+    //newly added
+    @XmlElement(name = "total_billing_cycles")
+    private Integer totalBillingCycles;
+
+    @XmlElement(name = "vat_reverse_charge_notes")
+    private String vatReverseChargeNotes;
+
+    @XmlElement(name = "bank_account_authorized_at")
+    private Timestamp bankAccountAuthorizedAt;
+
+
 
     public Account getAccount() {
         if (account != null && account.getHref() != null && !account.getHref().isEmpty()) {
@@ -356,6 +376,11 @@ public class Subscription extends AbstractSubscription {
         this.couponCode = couponCode;
     }
 
+    //newly added get()
+    public String getCouponCode() {
+        return couponCode;
+    }
+
     public void setCouponCodes(final List<String> couponCodes) {
         this.couponCodes = couponCodes;
     }
@@ -398,6 +423,11 @@ public class Subscription extends AbstractSubscription {
         this.shippingAddressId = longOrNull(shippingAddressId);
     }
 
+    //newly added get()
+    public Long getShippingAddressId() {
+        return shippingAddressId;
+    }
+
     public DateTime getUpdatedAt() {
         return updatedAt;
     }
@@ -420,6 +450,33 @@ public class Subscription extends AbstractSubscription {
 
     public void setConvertedAt(final Object convertedAt) {
         this.convertedAt = dateTimeOrNull(convertedAt);
+    }
+
+    //newly added
+    public Integer getTotalBillingCycles() {
+        return totalBillingCycles;
+    }
+
+    public void setTotalBillingCycles(final Object totalBillingCycles) {
+        this.totalBillingCycles = integerOrNull(totalBillingCycles);
+    }
+
+    //todo - newly added, check if this is required since the field is not being returned from recurly
+    public String getVatReverseChargeNotes() {
+        return vatReverseChargeNotes;
+    }
+
+    public void setVatReverseChargeNotes(final Object vatReverseChargeNotes) {
+        this.vatReverseChargeNotes = stringOrNull(vatReverseChargeNotes);
+    }
+
+    public Timestamp getBankAccountAuthorizedAt() {
+        return bankAccountAuthorizedAt;
+    }
+
+    //todo - check if this works
+    public void setBankAccountAuthorizedAt(Timestamp bankAccountAuthorizedAt) {
+        this.bankAccountAuthorizedAt = bankAccountAuthorizedAt;
     }
 
     @Override
@@ -459,6 +516,11 @@ public class Subscription extends AbstractSubscription {
         sb.append(", shippingAddressId=").append(shippingAddressId);
         sb.append(", startedWithGift=").append(startedWithGift);
         sb.append(", convertedAt=").append(convertedAt);
+
+        //newly added
+        sb.append(", vatReverseChargeNotes='").append(vatReverseChargeNotes).append('\'');
+        sb.append(", totalBillingCycles=").append(totalBillingCycles);
+        sb.append(", bankAccountAuthorizedAt=").append(bankAccountAuthorizedAt);
         sb.append('}');
         return sb.toString();
     }
@@ -573,6 +635,17 @@ public class Subscription extends AbstractSubscription {
             return false;
         }
 
+        //newly added
+        if (totalBillingCycles != null ? !totalBillingCycles.equals(that.totalBillingCycles) : that.totalBillingCycles != null) {
+            return false;
+        }
+        if (vatReverseChargeNotes != null ? !vatReverseChargeNotes.equals(that.vatReverseChargeNotes) : that.vatReverseChargeNotes != null) {
+            return false;
+        }
+        if (bankAccountAuthorizedAt != null ? !bankAccountAuthorizedAt.equals(that.bankAccountAuthorizedAt) : that.bankAccountAuthorizedAt != null) {
+            return false;
+        }
+
         return true;
     }
 
@@ -612,7 +685,12 @@ public class Subscription extends AbstractSubscription {
                 couponCode,
                 couponCodes,
                 convertedAt,
-                startedWithGift
+                startedWithGift,
+
+                //newly added
+                totalBillingCycles,
+                vatReverseChargeNotes,
+                bankAccountAuthorizedAt
         );
     }
 

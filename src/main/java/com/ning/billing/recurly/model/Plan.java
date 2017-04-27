@@ -117,8 +117,8 @@ public class Plan extends RecurlyObject {
     @XmlElement(name = "setup_fee_accounting_code")
     private String setupFeeAccountingCode;
 
-    @XmlElement(name = "tax_code")
-    private TaxCode taxCode;
+    @XmlElement(name = "tax_code", nillable = true)
+    private String taxCode;
 
     @XmlElement(name = "tax_exempt")
     private Boolean taxExempt;
@@ -312,27 +312,25 @@ public class Plan extends RecurlyObject {
         return setupFeeAccountingCode;
     }
 
-    public void setSetupFeeAccountingCode(String setupFeeAccountingCode) {
-        this.setupFeeAccountingCode = setupFeeAccountingCode;
+    public void setSetupFeeAccountingCode(final Object setupFeeAccountingCode) {
+        this.setupFeeAccountingCode = stringOrNull(setupFeeAccountingCode);
     }
 
     public String getTotalBillingCycles() {
         return totalBillingCycles;
     }
 
-    public void setTotalBillingCycles(String totalBillingCycles) {
-        this.totalBillingCycles = totalBillingCycles;
+    public void setTotalBillingCycles(final Object totalBillingCycles) {
+        this.totalBillingCycles = stringOrNull(totalBillingCycles);
     }
 
-    public TaxCode getTaxCode() {
+    public String getTaxCode() {
         return taxCode;
     }
 
-    public void setTaxCode(final String taxCode) {
-        this.taxCode = TaxCode.valueOf(taxCode.toUpperCase());
+    public void setTaxCode(final Object taxCode) {
+        this.taxCode = stringOrNull(taxCode);
     }
-
-
 
     public Boolean getTaxExempt() {
         return taxExempt;
