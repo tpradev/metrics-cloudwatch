@@ -373,14 +373,30 @@ public class RecurlyClient {
     }
 
     /**
+     *
+     * newly added - changed the method to return Subscription
      * Terminate a particular {@link Subscription} by it's UUID
      *
      * @param subscription Subscription to terminate
      */
-    public void terminateSubscription(final Subscription subscription, final RefundOption refund) {
-        doPUT(Subscription.SUBSCRIPTION_RESOURCE + "/" + subscription.getUuid() + "/terminate?refund=" + refund,
+    public Subscription terminateSubscription(final Subscription subscription, final RefundOption refund) {
+        return doPUT(Subscription.SUBSCRIPTION_RESOURCE + "/" + subscription.getUuid() + "/terminate?refund=" + refund,
               subscription, Subscription.class);
     }
+
+    /**
+     *
+     * Newly added code - terminate subscription
+     */
+
+    public Subscription terminateSubscription(final Subscription subscription, final RefundOption refund, final Boolean charge) {
+        return doPUT(Subscription.SUBSCRIPTION_RESOURCE + "/" + subscription.getUuid() + "/terminate?refund=" + refund + "&charge=" + charge,
+                subscription, Subscription.class);
+    }
+
+
+
+
 
     /**
      * Reactivating a canceled subscription
