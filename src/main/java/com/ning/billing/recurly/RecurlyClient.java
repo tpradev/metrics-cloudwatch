@@ -333,6 +333,17 @@ public class RecurlyClient {
     }
 
     /**
+     * Newly added code - included uuid in the method call
+     */
+
+    public Subscription previewSubscription(final Subscription subscription, final String uuid) {
+        return doPOST(Subscription.SUBSCRIPTION_RESOURCE
+                        + "/" + uuid + "/"
+                        + "/preview",
+                        subscription, Subscription.class);
+    }
+
+    /**
      * Get a particular {@link Subscription} by it's UUID
      * <p>
      * Returns information about a single subscription.
@@ -393,10 +404,6 @@ public class RecurlyClient {
         return doPUT(Subscription.SUBSCRIPTION_RESOURCE + "/" + subscription.getUuid() + "/terminate?refund=" + refund + "&charge=" + charge,
                 subscription, Subscription.class);
     }
-
-
-
-
 
     /**
      * Reactivating a canceled subscription
