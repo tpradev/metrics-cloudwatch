@@ -25,7 +25,7 @@
     <groupId>com.ning.billing</groupId>
     <artifactId>recurly-java-library</artifactId>
     <packaging>jar</packaging>
-    <version>0.9.1-SNAPSHOT</version>
+    <version>0.9.1</version>
     <name>Recurly Java library</name>
     <description>Java library for Recurly</description>
     <url>http://github.com/killbilling/recurly-java-library</url>
@@ -67,6 +67,7 @@
         <jackson.version>2.5.0</jackson.version>
         <guava.version>18.0</guava.version>
         <slf4j.version>1.7.10</slf4j.version>
+        <maven.plugin.maven-shade-plugin.version>2.3</maven.plugin.maven-shade-plugin.version>
     </properties>
     <dependencies>
         <dependency>
@@ -109,6 +110,7 @@
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
             <version>2.0.3</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.ning</groupId>
@@ -119,11 +121,13 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>2.7</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -145,6 +149,7 @@
         </dependency>
     </dependencies>
     <build>
+        <finalName>recurly-java-library</finalName>
         <plugins>
             <plugin>
                 <groupId>com.ning.maven.plugins</groupId>
@@ -493,6 +498,25 @@
                 <configuration>
                     <generateGitPropertiesFile>true</generateGitPropertiesFile>
                     <generateGitPropertiesFilename>src/main/resources/com/ning/billing/recurly/git.properties</generateGitPropertiesFilename>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>${maven.plugin.maven-shade-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <transformers>
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"></transformer>
+                    </transformers>
                 </configuration>
             </plugin>
         </plugins>
