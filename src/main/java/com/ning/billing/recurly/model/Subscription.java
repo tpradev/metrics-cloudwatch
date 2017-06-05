@@ -33,7 +33,6 @@ newly added fields:
     totalBillingCycles
     vatReverseChargeNotes
     bankAccountAuthorizedAt
-    redemptionCode
 
  */
 

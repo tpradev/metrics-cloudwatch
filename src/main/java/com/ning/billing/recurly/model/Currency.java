@@ -1,7 +1,11 @@
 package com.ning.billing.recurly.model;
 
 /**
- * Created by farza on 4/24/17.
+ * Currency
+ *
+ * @author Farza Shereef (farza.pulikkalakath@tp-link.com)
+ * @version 1.0
+ * @since 1.1
  */
 public enum Currency {
 

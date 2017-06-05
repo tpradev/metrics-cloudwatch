@@ -28,10 +28,10 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /*
 Newly added fields:
-    total_billing_cycles
-    setup_fee_accounting_code
-    tax_code
-    tax_exempt
+    totalBillingCycles
+    setupFeeAccountingCode
+    taxCode
+    taxExempt
  */
 
 @XmlRootElement(name = "plan")

@@ -29,10 +29,10 @@ import java.util.regex.Pattern;
 
 /*
 newly added fields:
-    vat_number
-    entity_use_code
-    account_acquisition
-    cc_emails
+    vatNumber
+    entityUseCode
+    accountAcquisition
+    ccEmails
  */
 
 @XmlRootElement(name = "account")

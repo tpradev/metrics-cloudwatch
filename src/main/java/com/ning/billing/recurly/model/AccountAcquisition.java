@@ -5,7 +5,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * Created by farza on 4/24/17.
+ * AccountAcquisition
+ *
+ * @author Farza Shereef (farza.pulikkalakath@tp-link.com)
+ * @version 1.0
+ * @since 1.1
  */
 
 @XmlRootElement(name = "account_acquisition")
