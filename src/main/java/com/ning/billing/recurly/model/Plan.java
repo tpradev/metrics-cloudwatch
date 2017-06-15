@@ -111,8 +111,9 @@ public class Plan extends RecurlyObject {
     private RecurlyUnitCurrency setupFeeInCents;
 
     //newly added block of code
+    //totalBillingCycles is given as String in API-documentation, but we implement it as Integer
     @XmlElement(name = "total_billing_cycles")
-    private String totalBillingCycles;
+    private Integer totalBillingCycles;
 
     @XmlElement(name = "setup_fee_accounting_code")
     private String setupFeeAccountingCode;
@@ -316,12 +317,12 @@ public class Plan extends RecurlyObject {
         this.setupFeeAccountingCode = stringOrNull(setupFeeAccountingCode);
     }
 
-    public String getTotalBillingCycles() {
+    public Integer getTotalBillingCycles() {
         return totalBillingCycles;
     }
 
     public void setTotalBillingCycles(final Object totalBillingCycles) {
-        this.totalBillingCycles = stringOrNull(totalBillingCycles);
+        this.totalBillingCycles = integerOrNull(totalBillingCycles);
     }
 
     public String getTaxCode() {
