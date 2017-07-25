@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 
 /*
 newly added fields:
-    vatNumber
+    vatNumber - recurly added this to their library in 0.11.1
     entityUseCode
     accountAcquisition
     ccEmails
@@ -405,6 +405,7 @@ public class Account extends RecurlyObject {
         sb.append(", hasFutureSubscription=").append(hasFutureSubscription);
         sb.append(", hasCanceledSubscription=").append(hasCanceledSubscription);
         sb.append(", hasPastDueInvoice=").append(hasPastDueInvoice);
+        sb.append(", vatNumber=").append(vatNumber);
         sb.append('}');
         return sb.toString();
     }
@@ -488,6 +489,9 @@ public class Account extends RecurlyObject {
         if (shippingAddresses != null ? !shippingAddresses.equals(account.shippingAddresses) : account.shippingAddresses != null) {
             return false;
         }
+        if (vatNumber != null ? !vatNumber.equals(account.vatNumber) : account.vatNumber != null) {
+            return false;
+        }
 
         return true;
     }
@@ -519,7 +523,8 @@ public class Account extends RecurlyObject {
                 billingInfo,
                 updatedAt,
                 taxExempt,
-                shippingAddresses
+                shippingAddresses,
+                vatNumber
         );
     }
 }

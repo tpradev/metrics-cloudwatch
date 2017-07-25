@@ -17,13 +17,15 @@
 
 package com.ning.billing.recurly.model;
 
-import com.google.common.base.Objects;
-import org.joda.time.DateTime;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlList;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.joda.time.DateTime;
+
+import com.google.common.base.Objects;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
@@ -149,6 +151,10 @@ public class Subscription extends AbstractSubscription {
     @XmlElement(name = "shipping_address_id")
     private Long shippingAddressId;
 
+    //new field added in version 0.11.1
+    @XmlElement(name = "no_billing_info_reason")
+    public String noBillingInfoReason;
+
     //newly added
     @XmlElement(name = "total_billing_cycles")
     private Integer totalBillingCycles;
@@ -158,8 +164,6 @@ public class Subscription extends AbstractSubscription {
 
     @XmlElement(name = "bank_account_authorized_at")
     private Timestamp bankAccountAuthorizedAt;
-
-
 
     public Account getAccount() {
         if (account != null && account.getHref() != null && !account.getHref().isEmpty()) {
@@ -371,13 +375,12 @@ public class Subscription extends AbstractSubscription {
         this.firstRenewalDate = dateTimeOrNull(firstRenewalDate);
     }
 
-    public void setCouponCode(final String couponCode) {
-        this.couponCode = couponCode;
-    }
-
-    //newly added get()
     public String getCouponCode() {
         return couponCode;
+    }
+
+    public void setCouponCode(final String couponCode) {
+        this.couponCode = couponCode;
     }
 
     public void setCouponCodes(final List<String> couponCodes) {
@@ -396,10 +399,14 @@ public class Subscription extends AbstractSubscription {
         return revenueScheduleType;
     }
 
-    public void setRevenueScheduleType(final String revenueScheduleType) {
+    /*public void setRevenueScheduleType(final String revenueScheduleType) {
         if (revenueScheduleType != null) {
             this.revenueScheduleType = RevenueScheduleType.valueOf(revenueScheduleType.toUpperCase());
         }
+    }*/
+
+    public void setRevenueScheduleType(final RevenueScheduleType revenueScheduleType) {
+        this.revenueScheduleType = revenueScheduleType;
     }
 
     public GiftCard getGiftCard() {
@@ -478,6 +485,14 @@ public class Subscription extends AbstractSubscription {
         this.bankAccountAuthorizedAt = bankAccountAuthorizedAt;
     }
 
+    public String getNoBillingInfoReason() {
+        return this.noBillingInfoReason;
+    }
+
+    public void setNoBillingInfoReason(final Object noBillingInfoReason) {
+        this.noBillingInfoReason = stringOrNull(noBillingInfoReason);
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
@@ -515,6 +530,7 @@ public class Subscription extends AbstractSubscription {
         sb.append(", shippingAddressId=").append(shippingAddressId);
         sb.append(", startedWithGift=").append(startedWithGift);
         sb.append(", convertedAt=").append(convertedAt);
+        sb.append(", noBillingInfoReason=").append(noBillingInfoReason);
 
         //newly added
         sb.append(", vatReverseChargeNotes='").append(vatReverseChargeNotes).append('\'');
@@ -633,6 +649,9 @@ public class Subscription extends AbstractSubscription {
         if (shippingAddressId != null ? !shippingAddressId.equals(that.shippingAddressId) : that.shippingAddressId != null) {
             return false;
         }
+        if (noBillingInfoReason != null ? !noBillingInfoReason.equals(that.noBillingInfoReason) : that.noBillingInfoReason != null) {
+            return false;
+        }
 
         //newly added
         if (totalBillingCycles != null ? !totalBillingCycles.equals(that.totalBillingCycles) : that.totalBillingCycles != null) {
@@ -684,6 +703,8 @@ public class Subscription extends AbstractSubscription {
                 couponCode,
                 couponCodes,
                 convertedAt,
+                startedWithGift,
+                noBillingInfoReason,
                 startedWithGift,
 
                 //newly added

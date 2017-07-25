@@ -68,6 +68,7 @@ public class TestSubscription extends TestModelBase {
                                         "  <first_renewal_date type=\"datetime\">2011-07-01T07:00:00Z</first_renewal_date>\n" +
                                         "  <started_with_gift type=\"boolean\">true</started_with_gift>\n" +
                                         "  <converted_at type=\"datetime\">2017-06-27T00:00:00Z</converted_at>" +
+                                        "  <no_billing_info_reason>plan_free_trial</no_billing_info_reason>" +
                                         "  <subscription_add_ons type=\"array\">\n" +
                                         "  </subscription_add_ons>\n" +
                                         "  <coupon_codes type=\"array\">\n" +
@@ -130,6 +131,7 @@ public class TestSubscription extends TestModelBase {
                                         "  <revenue_schedule_type>evenly</revenue_schedule_type>\n" +
                                         "  <started_with_gift type=\"boolean\">true</started_with_gift>\n" +
                                         "  <converted_at type=\"datetime\">2017-06-27T00:00:00Z</converted_at>" +
+                                        "  <no_billing_info_reason>plan_free_trial</no_billing_info_reason>" +
                                         "  <subscription_add_ons type=\"array\">\n" +
                                         "    <subscription_add_on>\n" +
                                         "      <add_on_code>extra_users</add_on_code>\n" +
@@ -163,39 +165,6 @@ public class TestSubscription extends TestModelBase {
         assertNotEquals(System.identityHashCode(subscription), System.identityHashCode(otherSubscription));
         assertEquals(subscription.hashCode(), otherSubscription.hashCode());
         assertEquals(subscription, otherSubscription);
-    }
-    
-    @Test(groups = "fast")
-    public void testSetRevenueScheduleType() throws Exception {
-        Subscription subscription = new Subscription();
-        subscription.setRevenueScheduleType(null);
-        assertEquals(subscription.getRevenueScheduleType(), null );
-        
-        verifyRevenueScheduleTypeWithInvalidValue("INVALID_STRING");
-        verifyRevenueScheduleTypeWithInvalidValue("");
-        verifyRevenueScheduleTypeWithInvalidValue(" ");
-        
-        for (RevenueScheduleType revenueScheduleType : RevenueScheduleType.values()) {
-            verifyRevenueScheduleType(revenueScheduleType);
-        }
-    }
-    
-    private void verifyRevenueScheduleTypeWithInvalidValue(String invalidValue){
-    	Subscription subscription = new Subscription();
-
-        try {
-            //we expect an exception here
-            subscription.setRevenueScheduleType(invalidValue);
-            Assert.fail();
-        } catch (IllegalArgumentException iae) {
-            //iae.printStackTrace();
-        }
-    }
-    
-    private void verifyRevenueScheduleType(RevenueScheduleType revenueScheduleType){
-        Subscription subscription = new Subscription();
-        subscription.setRevenueScheduleType(revenueScheduleType.getType());
-        assertEquals(subscription.getRevenueScheduleType(), revenueScheduleType);
     }
 
     private void verifySubscriptionAddons(final Subscription subscription) {
@@ -235,6 +204,7 @@ public class TestSubscription extends TestModelBase {
         Assert.assertEquals(subscription.getTaxRate(), new BigDecimal("0.0875"));
         Assert.assertEquals(subscription.getConvertedAt(), new DateTime("2017-06-27T00:00:00Z"));
         Assert.assertTrue(subscription.getStartedWithGift());
+        Assert.assertEquals(subscription.getNoBillingInfoReason(), "plan_free_trial");
 
         return subscription;
     }

@@ -17,32 +17,30 @@
 
 package com.ning.billing.recurly;
 
-import java.util.Date;
 import java.util.Random;
-import java.util.UUID;
-
-import com.ning.billing.recurly.model.Adjustment;
-import com.ning.billing.recurly.model.Adjustments;
-import com.ning.billing.recurly.model.Delivery;
-import com.ning.billing.recurly.model.GiftCard;
-import com.ning.billing.recurly.model.Invoice;
-import com.ning.billing.recurly.model.Redemption;
-import com.ning.billing.recurly.model.ShippingAddress;
-import com.ning.billing.recurly.model.Transactions;
-import com.ning.billing.recurly.model.Usage;
 import org.joda.time.DateTime;
-
 import com.ning.billing.recurly.model.Account;
 import com.ning.billing.recurly.model.AddOn;
 import com.ning.billing.recurly.model.Address;
 import com.ning.billing.recurly.model.BillingInfo;
 import com.ning.billing.recurly.model.Coupon;
+import com.ning.billing.recurly.model.Adjustment;
+import com.ning.billing.recurly.model.Adjustments;
+import com.ning.billing.recurly.model.Delivery;
+import com.ning.billing.recurly.model.GiftCard;
+import com.ning.billing.recurly.model.Invoice;
+import com.ning.billing.recurly.model.MeasuredUnit;
 import com.ning.billing.recurly.model.Plan;
+import com.ning.billing.recurly.model.Purchase;
 import com.ning.billing.recurly.model.RecurlyUnitCurrency;
+import com.ning.billing.recurly.model.Redemption;
+import com.ning.billing.recurly.model.ShippingAddress;
 import com.ning.billing.recurly.model.Subscription;
 import com.ning.billing.recurly.model.SubscriptionAddOn;
 import com.ning.billing.recurly.model.SubscriptionAddOns;
 import com.ning.billing.recurly.model.Transaction;
+import com.ning.billing.recurly.model.Transactions;
+import com.ning.billing.recurly.model.Usage;
 
 public class TestUtils {
 
@@ -263,6 +261,7 @@ public class TestUtils {
         account.setFirstName(randomAlphaNumericString(5, seed));
         account.setLastName(randomAlphaNumericString(6, seed));
         account.setAddress(createRandomAddress(seed));
+        account.setVatNumber(randomAlphaNumericString(15, seed));
 
         return account;
     }
@@ -332,6 +331,15 @@ public class TestUtils {
     }
 
     /**
+     * Creates a random {@link com.ning.billing.recurly.model.Adjustment} object for testing use
+     *
+     * @return The random {@link com.ning.billing.recurly.model.Adjustment} object
+     */
+    public static Adjustment createRandomAdjustment() {
+        return createRandomAdjustment(randomSeed());
+    }
+
+    /**
      * Creates a random {@link com.ning.billing.recurly.model.Adjustment} object for testing use given a seed
      *
      * @param seed The RNG seed
@@ -340,25 +348,16 @@ public class TestUtils {
     public static Adjustment createRandomAdjustment(final int seed) {
         final Adjustment adjustment = new Adjustment();
 
-        adjustment.setAccount(createRandomAccount(seed));
-        adjustment.setUuid(randomAlphaNumericString(20, seed));
         adjustment.setDescription(randomAlphaNumericString(50, seed));
         adjustment.setAccountingCode(randomAlphaNumericString(10, seed));
-        adjustment.setOrigin(randomAlphaNumericString(10, seed));
         adjustment.setUnitAmountInCents(randomInteger(1000, seed));
         adjustment.setQuantity(1 + randomInteger(10, seed));
-        adjustment.setDiscountInCents(randomInteger(1000, seed));
-        adjustment.setTaxInCents(randomInteger(1000, seed));
-        adjustment.setTotalInCents(randomInteger(1000, seed));
         adjustment.setCurrency(randomCurrency(seed));
-        adjustment.setTaxable(true);
         adjustment.setStartDate(NOW);
         adjustment.setStartDate(TOMORROW);
-        adjustment.setCreatedAt(NOW);
 
         return adjustment;
     }
-
 
     /**
      * Creates a random {@link com.ning.billing.recurly.model.BillingInfo} object for testing use.
@@ -385,9 +384,9 @@ public class TestUtils {
         info.setAddress1(randomAlphaNumericString(10, seed));
         info.setAddress2(randomAlphaNumericString(10, seed));
         info.setCity(randomAlphaNumericString(10, seed));
-        info.setState(randomAlphaNumericString(10, seed).toUpperCase());
+        info.setState("CA");
         info.setZip("94110");
-        info.setCountry(randomAlphaNumericString(2, seed).toUpperCase());
+        info.setCountry("US");
         info.setPhone(randomInteger(8, seed));
         info.setVatNumber(randomNumericString(8, seed));
         info.setYear(createTestCCYear());
@@ -696,7 +695,7 @@ public class TestUtils {
         coupon.setName(randomAlphaNumericString(10, seed));
         coupon.setCouponCode(randomAlphaNumericString(10, seed).toLowerCase());
         coupon.setDiscountType("percent");
-        coupon.setDiscountPercent(randomNumericString(2, seed));
+        coupon.setDiscountPercent(randomInteger(90, seed) + 1);
 
         return coupon;
     }
@@ -851,7 +850,6 @@ public class TestUtils {
         return giftCardData;
     }
 
-
     /**
      * Creates a random {@link Usage} object for use in Tests
      *
@@ -878,5 +876,53 @@ public class TestUtils {
         usage.setUsageAt(NOW);
 
         return usage;
+    }
+
+    /**
+     * Creates a random {@link MeasuredUnit} object for use in Tests given a seed
+     *
+     * @param seed The RNG seed
+     * @return The random {@link MeasuredUnit} object
+     */
+    public static MeasuredUnit createRandomMeasuredUnit(final int seed) {
+        final MeasuredUnit measuredUnit = new MeasuredUnit();
+
+        measuredUnit.setName(randomAlphaNumericString(10, seed));
+        measuredUnit.setDisplayName(randomAlphaNumericString(10, seed));
+        measuredUnit.setDescription(randomAlphaNumericString(50, seed));
+
+        return measuredUnit;
+    }
+
+    /**
+     * Creates a random {@link Purchase} object for use in Tests
+     *
+     * @return The random {@link Purchase} object
+     */
+    public static Purchase createRandomPurchase() {
+        return createRandomPurchase(randomSeed());
+    }
+
+    /**
+     * Creates a random {@link Purchase} object for use in Tests given a seed
+     *
+     * @param seed The RNG seed
+     * @return The random {@link Purchase} object
+     */
+    public static Purchase createRandomPurchase(final int seed) {
+        final Purchase purchase = new Purchase();
+
+        purchase.setAccount(createRandomAccount(seed));
+
+        Adjustments adjustments = new Adjustments();
+        adjustments.add(createRandomAdjustment(seed));
+        purchase.setAdjustments(adjustments);
+
+        purchase.setCurrency("USD");
+        purchase.setCollectionMethod("automatic");
+        purchase.setPoNumber("PO12345");
+        purchase.setNetTerms(30);
+
+        return purchase;
     }
 }

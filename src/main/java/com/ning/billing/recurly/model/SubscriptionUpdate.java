@@ -17,9 +17,8 @@
 
 package com.ning.billing.recurly.model;
 
-import com.google.common.base.Objects;
-
 import javax.xml.bind.annotation.XmlElement;
+import com.google.common.base.Objects;
 
 /**
  * Subscription object for update calls.
@@ -53,7 +52,6 @@ public class SubscriptionUpdate extends AbstractSubscription {
     public void setTimeframe(final Timeframe timeframe) {
         this.timeframe = timeframe;
     }
-
 
     @XmlElement(name = "collection_method")
     private String collectionMethod;
@@ -142,6 +140,9 @@ public class SubscriptionUpdate extends AbstractSubscription {
         if (timeframe != that.timeframe) {
             return false;
         }
+        if (couponCode != null ? !couponCode.equals(that.couponCode) : that.couponCode != null) {
+            return false;
+        }
 
         //newly added
         if (netTerms != null ? !netTerms.equals(that.netTerms) : that.netTerms != null) {
@@ -170,6 +171,7 @@ public class SubscriptionUpdate extends AbstractSubscription {
     public int hashCode() {
         return Objects.hashCode(
                 timeframe,
+                couponCode,
                 collectionMethod,
 
                 //newly added

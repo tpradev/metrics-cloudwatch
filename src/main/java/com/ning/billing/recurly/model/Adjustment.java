@@ -80,6 +80,9 @@ public class Adjustment extends RecurlyObject {
     @XmlElement(name = "updated_at")
     private DateTime updatedAt;
 
+    @XmlElement(name = "revenue_schedule_type")
+    private RevenueScheduleType revenueScheduleType;
+
     public Account getAccount() {
         if (account != null && account.getCreatedAt() == null) {
             account = fetch(account, Account.class);
@@ -231,6 +234,14 @@ public class Adjustment extends RecurlyObject {
         return adjustmentRefund;
     }
 
+    public RevenueScheduleType getRevenueScheduleType() {
+        return revenueScheduleType;
+    }
+
+    public void setRevenueScheduleType(final RevenueScheduleType revenueScheduleType) {
+        this.revenueScheduleType = revenueScheduleType;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
@@ -253,6 +264,7 @@ public class Adjustment extends RecurlyObject {
         sb.append(", endDate=").append(endDate);
         sb.append(", createdAt=").append(createdAt);
         sb.append(", updatedAt=").append(updatedAt);
+        sb.append(", revenueScheduleType=").append(revenueScheduleType);
         sb.append('}');
         return sb.toString();
     }
@@ -319,6 +331,10 @@ public class Adjustment extends RecurlyObject {
             return false;
         }
 
+        if (revenueScheduleType != null ? !revenueScheduleType.equals(that.revenueScheduleType) : that.revenueScheduleType != null) {
+            return false;
+        }
+
         return true;
     }
 
@@ -342,7 +358,8 @@ public class Adjustment extends RecurlyObject {
                 startDate,
                 endDate,
                 createdAt,
-                updatedAt
+                updatedAt,
+                revenueScheduleType
         );
     }
 }

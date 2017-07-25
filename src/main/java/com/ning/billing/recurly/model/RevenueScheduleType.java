@@ -16,13 +16,21 @@
  */
 package com.ning.billing.recurly.model;
 
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+@XmlEnum(String.class)
 public enum RevenueScheduleType {
+    @XmlEnumValue("never")
     NEVER("never"),
+    @XmlEnumValue("evenly")
     EVENLY("evenly"),
+    @XmlEnumValue("at_invoice")
     AT_INVOICE("at_invoice"),
+    @XmlEnumValue("at_range_end")
     AT_RANGE_END("at_range_end"),
+    @XmlEnumValue("at_range_start")
     AT_RANGE_START("at_range_start");
 
     private final String type;
@@ -31,7 +39,6 @@ public enum RevenueScheduleType {
         this.type = type;
     }
 
-    @JsonValue
     public String getType() {
         return type;
     }
