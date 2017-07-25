@@ -17,24 +17,9 @@
 
 package com.ning.billing.recurly.model;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-import javax.xml.bind.annotation.XmlTransient;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
-import org.joda.time.DateTime;
-
-import com.ning.billing.recurly.RecurlyClient;
-import com.ning.billing.recurly.model.jackson.RecurlyObjectsSerializer;
-import com.ning.billing.recurly.model.jackson.RecurlyXmlSerializerProvider;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.AnnotationIntrospector;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -45,6 +30,18 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
+import com.ning.billing.recurly.RecurlyClient;
+import com.ning.billing.recurly.model.jackson.RecurlyObjectsSerializer;
+import com.ning.billing.recurly.model.jackson.RecurlyXmlSerializerProvider;
+import org.joda.time.DateTime;
+
+import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlTransient;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class RecurlyObject {
