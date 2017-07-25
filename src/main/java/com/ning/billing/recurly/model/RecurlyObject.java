@@ -194,7 +194,6 @@ public abstract class RecurlyObject {
             if (map.keySet().size() == 2 && "datetime".equals(map.get("type"))) {
                 return new DateTime(map.get(""));
             }
-            return null;
         }
 
         return new DateTime(object.toString());
