@@ -17,14 +17,13 @@
 
 package com.ning.billing.recurly.model;
 
+import com.google.common.base.Objects;
+import org.joda.time.DateTime;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-
-import org.joda.time.DateTime;
-import com.google.common.base.Objects;
-
 import java.util.List;
 
 /**
@@ -53,7 +52,7 @@ public class Coupon extends RecurlyObject {
     }
 
     public enum Type {
-        single_code, bulk
+        single_code, bulk, unique_code
     }
 
     @XmlTransient
