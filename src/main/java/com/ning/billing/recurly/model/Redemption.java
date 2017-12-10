@@ -17,13 +17,12 @@
 
 package com.ning.billing.recurly.model;
 
+import com.google.common.base.Objects;
 import org.joda.time.DateTime;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-
-import com.google.common.base.Objects;
 
 @XmlRootElement(name = "redemption")
 public class Redemption extends RecurlyObject {
@@ -42,6 +41,9 @@ public class Redemption extends RecurlyObject {
 
     @XmlElement(name = "account_code")
     private String accountCode;
+
+    @XmlElement(name = "subscription_uuid")
+    private String subscriptionUuid;
 
     @XmlElement(name = "coupon")
     private Coupon coupon;
@@ -73,6 +75,14 @@ public class Redemption extends RecurlyObject {
 
     public void setAccountCode(final Object accountCode) {
         this.accountCode = stringOrNull(accountCode);
+    }
+
+    public String getSubscriptionUuid() {
+        return subscriptionUuid;
+    }
+
+    public void setSubscriptionUuid(final Object subscriptionUuid) {
+        this.subscriptionUuid = stringOrNull(subscriptionUuid);
     }
 
     public Coupon getCoupon() {
@@ -158,6 +168,7 @@ public class Redemption extends RecurlyObject {
         final StringBuilder sb = new StringBuilder();
         sb.append("Redemption");
         sb.append("{accountCode=").append(accountCode);
+        sb.append(", subscriptionUuid=").append(subscriptionUuid);
         sb.append(", coupon=").append(coupon);
         sb.append(", account=").append(account);
         sb.append(", uuid=").append(uuid);
@@ -179,6 +190,9 @@ public class Redemption extends RecurlyObject {
         final Redemption that = (Redemption) o;
 
         if (accountCode != null ? !accountCode.equals(that.accountCode) : that.accountCode != null) {
+            return false;
+        }
+        if (subscriptionUuid != null ? !subscriptionUuid.equals(that.subscriptionUuid) : that.subscriptionUuid != null) {
             return false;
         }
         if (coupon != null ? !coupon.equals(that.coupon) : that.coupon != null) {
@@ -217,6 +231,7 @@ public class Redemption extends RecurlyObject {
     public int hashCode() {
         return Objects.hashCode(
                 accountCode,
+                subscriptionUuid,
                 coupon,
                 account,
                 singleUse,

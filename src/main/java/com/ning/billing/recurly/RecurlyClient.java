@@ -269,7 +269,7 @@ public class RecurlyClient {
      * <p>
      *
      * @param accountCode recurly account id
-     * @param type {@link Adjustments.AdjustmentType}
+     * @param type        {@link Adjustments.AdjustmentType}
      * @return the adjustments on the account
      */
     public Adjustments getAccountAdjustments(final String accountCode, final Adjustments.AdjustmentType type) {
@@ -281,8 +281,8 @@ public class RecurlyClient {
      * <p>
      *
      * @param accountCode recurly account id
-     * @param type {@link Adjustments.AdjustmentType}
-     * @param state {@link Adjustments.AdjustmentState}
+     * @param type        {@link Adjustments.AdjustmentType}
+     * @param state       {@link Adjustments.AdjustmentState}
      * @return the adjustments on the account
      */
     public Adjustments getAccountAdjustments(final String accountCode, final Adjustments.AdjustmentType type, final Adjustments.AdjustmentState state) {
@@ -294,9 +294,9 @@ public class RecurlyClient {
      * <p>
      *
      * @param accountCode recurly account id
-     * @param type {@link Adjustments.AdjustmentType}
-     * @param state {@link Adjustments.AdjustmentState}
-     * @param params {@link QueryParams}
+     * @param type        {@link Adjustments.AdjustmentType}
+     * @param state       {@link Adjustments.AdjustmentState}
+     * @param params      {@link QueryParams}
      * @return the adjustments on the account
      */
     public Adjustments getAccountAdjustments(final String accountCode, final Adjustments.AdjustmentType type, final Adjustments.AdjustmentState state, final QueryParams params) {
@@ -314,8 +314,8 @@ public class RecurlyClient {
 
     public Adjustment createAccountAdjustment(final String accountCode, final Adjustment adjustment) {
         return doPOST(Account.ACCOUNT_RESOURCE + "/" + accountCode + Adjustments.ADJUSTMENTS_RESOURCE,
-                      adjustment,
-                      Adjustment.class);
+                adjustment,
+                Adjustment.class);
     }
 
     public void deleteAccountAdjustment(final String accountCode) {
@@ -338,7 +338,7 @@ public class RecurlyClient {
      */
     public Subscription createSubscription(final Subscription subscription) {
         return doPOST(Subscription.SUBSCRIPTION_RESOURCE,
-                      subscription, Subscription.class);
+                subscription, Subscription.class);
     }
 
     /**
@@ -351,8 +351,8 @@ public class RecurlyClient {
      */
     public Subscription previewSubscription(final Subscription subscription) {
         return doPOST(Subscription.SUBSCRIPTION_RESOURCE
-                      + "/preview",
-                      subscription, Subscription.class);
+                        + "/preview",
+                subscription, Subscription.class);
     }
 
     /**
@@ -363,7 +363,7 @@ public class RecurlyClient {
         return doPOST(Subscription.SUBSCRIPTION_RESOURCE
                         + "/" + uuid + "/"
                         + "/preview",
-                        subscription, Subscription.class);
+                subscription, Subscription.class);
     }
 
     /**
@@ -376,8 +376,8 @@ public class RecurlyClient {
      */
     public Subscription getSubscription(final String uuid) {
         return doGET(Subscriptions.SUBSCRIPTIONS_RESOURCE
-                     + "/" + uuid,
-                     Subscription.class);
+                        + "/" + uuid,
+                Subscription.class);
     }
 
     /**
@@ -390,7 +390,7 @@ public class RecurlyClient {
      */
     public Subscription cancelSubscription(final Subscription subscription) {
         return doPUT(Subscription.SUBSCRIPTION_RESOURCE + "/" + subscription.getUuid() + "/cancel",
-                     subscription, Subscription.class);
+                subscription, Subscription.class);
     }
 
     /**
@@ -403,11 +403,10 @@ public class RecurlyClient {
      */
     public Subscription postponeSubscription(final Subscription subscription, final DateTime renewaldate) {
         return doPUT(Subscription.SUBSCRIPTION_RESOURCE + "/" + subscription.getUuid() + "/postpone?next_renewal_date=" + renewaldate,
-                     subscription, Subscription.class);
+                subscription, Subscription.class);
     }
 
     /**
-     *
      * newly added - changed the method to return Subscription
      * Terminate a particular {@link Subscription} by it's UUID
      *
@@ -415,11 +414,10 @@ public class RecurlyClient {
      */
     public Subscription terminateSubscription(final Subscription subscription, final RefundOption refund) {
         return doPUT(Subscription.SUBSCRIPTION_RESOURCE + "/" + subscription.getUuid() + "/terminate?refund=" + refund,
-              subscription, Subscription.class);
+                subscription, Subscription.class);
     }
 
     /**
-     *
      * Newly added code - terminate subscription
      */
 
@@ -438,7 +436,7 @@ public class RecurlyClient {
      */
     public Subscription reactivateSubscription(final Subscription subscription) {
         return doPUT(Subscription.SUBSCRIPTION_RESOURCE + "/" + subscription.getUuid() + "/reactivate",
-                     subscription, Subscription.class);
+                subscription, Subscription.class);
     }
 
     /**
@@ -452,9 +450,9 @@ public class RecurlyClient {
      */
     public Subscription updateSubscription(final String uuid, final SubscriptionUpdate subscriptionUpdate) {
         return doPUT(Subscriptions.SUBSCRIPTIONS_RESOURCE
-                     + "/" + uuid,
-                     subscriptionUpdate,
-                     Subscription.class);
+                        + "/" + uuid,
+                subscriptionUpdate,
+                Subscription.class);
     }
 
     /**
@@ -467,9 +465,9 @@ public class RecurlyClient {
      */
     public Subscription updateSubscriptionPreview(final String uuid, final SubscriptionUpdate subscriptionUpdate) {
         return doPOST(Subscriptions.SUBSCRIPTIONS_RESOURCE
-                      + "/" + uuid + "/preview",
-                      subscriptionUpdate,
-                      Subscription.class);
+                        + "/" + uuid + "/preview",
+                subscriptionUpdate,
+                Subscription.class);
     }
 
 
@@ -478,13 +476,13 @@ public class RecurlyClient {
      * <p>
      * Returns information about a single subscription.
      *
-     * @param uuid UUID of the subscription to preview an update for
+     * @param uuid              UUID of the subscription to preview an update for
      * @param subscriptionNotes SubscriptionNotes object
      * @return Subscription the updated subscription
      */
     public Subscription updateSubscriptionNotes(final String uuid, final SubscriptionNotes subscriptionNotes) {
-      return doPUT(SubscriptionNotes.SUBSCRIPTION_RESOURCE + "/" + uuid + "/notes",
-                   subscriptionNotes, Subscription.class);
+        return doPUT(SubscriptionNotes.SUBSCRIPTION_RESOURCE + "/" + uuid + "/notes",
+                subscriptionNotes, Subscription.class);
     }
 
     /**
@@ -497,9 +495,9 @@ public class RecurlyClient {
      */
     public Subscriptions getAccountSubscriptions(final String accountCode) {
         return doGET(Account.ACCOUNT_RESOURCE
-                     + "/" + accountCode
-                     + Subscriptions.SUBSCRIPTIONS_RESOURCE,
-                     Subscriptions.class);
+                        + "/" + accountCode
+                        + Subscriptions.SUBSCRIPTIONS_RESOURCE,
+                Subscriptions.class);
     }
 
     /**
@@ -536,7 +534,7 @@ public class RecurlyClient {
      * @return Integer on success, null otherwise
      */
     public Integer getSubscriptionsCount(final QueryParams params) {
-        FluentCaseInsensitiveStringsMap map = doHEAD(Subscription.SUBSCRIPTION_RESOURCE,  params);
+        FluentCaseInsensitiveStringsMap map = doHEAD(Subscription.SUBSCRIPTION_RESOURCE, params);
         return Integer.parseInt(map.getFirstValue("X-Records"));
     }
 
@@ -546,8 +544,8 @@ public class RecurlyClient {
      * Returns subscriptions associated with an account
      *
      * @param accountCode recurly account id
-     * @param state {@link SubscriptionState}
-     * @param params {@link QueryParams}
+     * @param state       {@link SubscriptionState}
+     * @param params      {@link QueryParams}
      * @return Subscriptions on the account
      */
     public Subscriptions getAccountSubscriptions(final String accountCode, final SubscriptionState state, final QueryParams params) {
@@ -565,8 +563,8 @@ public class RecurlyClient {
      * <p>
      *
      * @param subscriptionCode The recurly id of the {@link Subscription }
-     * @param addOnCode recurly id of {@link AddOn}
-     * @param usage the usage to post on recurly
+     * @param addOnCode        recurly id of {@link AddOn}
+     * @param usage            the usage to post on recurly
      * @return the {@link Usage} object as identified by the passed in object
      */
     public Usage postSubscriptionUsage(final String subscriptionCode, final String addOnCode, final Usage usage) {
@@ -624,7 +622,7 @@ public class RecurlyClient {
         // Unset it to avoid confusing Recurly
         billingInfo.setAccount(null);
         return doPUT(Account.ACCOUNT_RESOURCE + "/" + accountCode + BillingInfo.BILLING_INFO_RESOURCE,
-                     billingInfo, BillingInfo.class);
+                billingInfo, BillingInfo.class);
     }
 
     /**
@@ -637,7 +635,7 @@ public class RecurlyClient {
      */
     public BillingInfo getBillingInfo(final String accountCode) {
         return doGET(Account.ACCOUNT_RESOURCE + "/" + accountCode + BillingInfo.BILLING_INFO_RESOURCE,
-                     BillingInfo.class);
+                BillingInfo.class);
     }
 
     /**
@@ -665,7 +663,7 @@ public class RecurlyClient {
      */
     public Transactions getAccountTransactions(final String accountCode) {
         return doGET(Accounts.ACCOUNTS_RESOURCE + "/" + accountCode + Transactions.TRANSACTIONS_RESOURCE,
-                     Transactions.class);
+                Transactions.class);
     }
 
     /**
@@ -674,9 +672,9 @@ public class RecurlyClient {
      * Returns the account's transaction history
      *
      * @param accountCode recurly account id
-     * @param state {@link TransactionState}
-     * @param type {@link TransactionType}
-     * @param params {@link QueryParams}
+     * @param state       {@link TransactionState}
+     * @param type        {@link TransactionType}
+     * @param params      {@link QueryParams}
      * @return the transaction history associated with this account on success, null otherwise
      */
     public Transactions getAccountTransactions(final String accountCode, final TransactionState state, final TransactionType type, final QueryParams params) {
@@ -703,8 +701,8 @@ public class RecurlyClient {
      * <p>
      * All transactions on the site
      *
-     * @param state {@link TransactionState}
-     * @param type {@link TransactionType}
+     * @param state  {@link TransactionState}
+     * @param type   {@link TransactionType}
      * @param params {@link QueryParams}
      * @return the transaction history of the site on success, null otherwise
      */
@@ -734,7 +732,7 @@ public class RecurlyClient {
      */
     public Transaction getTransaction(final String transactionId) {
         return doGET(Transactions.TRANSACTIONS_RESOURCE + "/" + transactionId,
-                     Transaction.class);
+                Transaction.class);
     }
 
     /**
@@ -769,10 +767,9 @@ public class RecurlyClient {
      * <p>
      * Returns the invoice given an integer id
      *
-     * @deprecated Please switch to using a string for invoice ids
-     *
      * @param invoiceId Recurly Invoice ID
      * @return the invoice
+     * @deprecated Please switch to using a string for invoice ids
      */
     @Deprecated
     public Invoice getInvoice(final Integer invoiceId) {
@@ -781,7 +778,7 @@ public class RecurlyClient {
 
     /**
      * Lookup an invoice given an invoice id
-     *
+     * <p>
      * <p>
      * Returns the invoice given a string id.
      * The invoice may or may not have acountry code prefix (ex: IE1023).
@@ -800,10 +797,9 @@ public class RecurlyClient {
      * <p>
      * Returns the invoice pdf as an inputStream
      *
-     * @deprecated Prefer using Invoice#getId() as the id param (which is a String)
-     *
      * @param invoiceId Recurly Invoice ID
      * @return the invoice pdf as an inputStream
+     * @deprecated Prefer using Invoice#getId() as the id param (which is a String)
      */
     @Deprecated
     public InputStream getInvoicePdf(final Integer invoiceId) {
@@ -832,7 +828,7 @@ public class RecurlyClient {
      */
     public Invoices getAccountInvoices(final String accountCode) {
         return doGET(Accounts.ACCOUNTS_RESOURCE + "/" + accountCode + Invoices.INVOICES_RESOURCE,
-                     Invoices.class);
+                Invoices.class);
     }
 
     /**
@@ -840,9 +836,9 @@ public class RecurlyClient {
      * <p/>
      * Returns the refunded invoice
      *
-     * @param invoiceId The id of the invoice to refund
+     * @param invoiceId     The id of the invoice to refund
      * @param amountInCents The open amount to refund
-     * @param order If credit line items exist on the invoice, this parameter specifies which refund method to use first
+     * @param order         If credit line items exist on the invoice, this parameter specifies which refund method to use first
      * @return the refunded invoice
      */
     public Invoice refundInvoice(final String invoiceId, final Integer amountInCents, final RefundApplyOrder order) {
@@ -860,7 +856,7 @@ public class RecurlyClient {
      *
      * @param invoiceId The id of the invoice to refund
      * @param lineItems The list of adjustment refund objects
-     * @param order If credit line items exist on the invoice, this parameter specifies which refund method to use first
+     * @param order     If credit line items exist on the invoice, this parameter specifies which refund method to use first
      * @return the refunded invoice
      */
     public Invoice refundInvoice(final String invoiceId, List<AdjustmentRefund> lineItems, final RefundApplyOrder order) {
@@ -890,8 +886,8 @@ public class RecurlyClient {
      * Returns the account's invoices
      *
      * @param accountCode recurly account id
-     * @param state {@link InvoiceState} state of the invoices
-     * @param params {@link QueryParams}
+     * @param state       {@link InvoiceState} state of the invoices
+     * @param params      {@link QueryParams}
      * @return the invoices associated with this account on success, null otherwise
      */
     public Invoices getAccountInvoices(final String accountCode, final InvoiceState state, final QueryParams params) {
@@ -915,9 +911,8 @@ public class RecurlyClient {
     /**
      * Mark an invoice as paid successfully - Recurly Enterprise Feature
      *
-     * @deprecated Prefer using Invoice#getId() as the id param (which is a String)
-     *
      * @param invoiceId Recurly Invoice ID
+     * @deprecated Prefer using Invoice#getId() as the id param (which is a String)
      */
     @Deprecated
     public Invoice markInvoiceSuccessful(final Integer invoiceId) {
@@ -936,9 +931,8 @@ public class RecurlyClient {
     /**
      * Mark an invoice as failed collection
      *
-     * @deprecated Prefer using Invoice#getId() as the id param (which is a String)
-     *
      * @param invoiceId Recurly Invoice ID
+     * @deprecated Prefer using Invoice#getId() as the id param (which is a String)
      */
     @Deprecated
     public Invoice markInvoiceFailed(final Integer invoiceId) {
@@ -966,10 +960,9 @@ public class RecurlyClient {
     /**
      * Enter an offline payment for a manual invoice (beta) - Recurly Enterprise Feature
      *
-     * @deprecated Prefer using Invoice#getId() as the id param (which is a String)
-     *
      * @param invoiceId Recurly Invoice ID
      * @param payment   The external payment
+     * @deprecated Prefer using Invoice#getId() as the id param (which is a String)
      */
     @Deprecated
     public Transaction enterOfflinePayment(final Integer invoiceId, final Transaction payment) {
@@ -1061,8 +1054,8 @@ public class RecurlyClient {
      */
     public void deletePlan(final String planCode) {
         doDELETE(Plan.PLANS_RESOURCE +
-                 "/" +
-                 planCode);
+                "/" +
+                planCode);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -1077,10 +1070,10 @@ public class RecurlyClient {
      */
     public AddOn createPlanAddOn(final String planCode, final AddOn addOn) {
         return doPOST(Plan.PLANS_RESOURCE +
-                      "/" +
-                      planCode +
-                      AddOn.ADDONS_RESOURCE,
-                      addOn, AddOn.class);
+                        "/" +
+                        planCode +
+                        AddOn.ADDONS_RESOURCE,
+                addOn, AddOn.class);
     }
 
     /**
@@ -1093,11 +1086,11 @@ public class RecurlyClient {
      */
     public AddOn getAddOn(final String planCode, final String addOnCode) {
         return doGET(Plan.PLANS_RESOURCE +
-                     "/" +
-                     planCode +
-                     AddOn.ADDONS_RESOURCE +
-                     "/" +
-                     addOnCode, AddOn.class);
+                "/" +
+                planCode +
+                AddOn.ADDONS_RESOURCE +
+                "/" +
+                addOnCode, AddOn.class);
     }
 
     /**
@@ -1109,9 +1102,9 @@ public class RecurlyClient {
      */
     public AddOns getAddOns(final String planCode) {
         return doGET(Plan.PLANS_RESOURCE +
-                "/" +
-                planCode +
-                AddOn.ADDONS_RESOURCE,
+                        "/" +
+                        planCode +
+                        AddOn.ADDONS_RESOURCE,
                 AddOns.class);
     }
 
@@ -1120,14 +1113,14 @@ public class RecurlyClient {
      * <p>
      *
      * @param planCode
-     * @param params {@link QueryParams}
+     * @param params   {@link QueryParams}
      * @return the {@link AddOn} objects as identified by the passed plan ID
      */
     public AddOns getAddOns(final String planCode, final QueryParams params) {
         return doGET(Plan.PLANS_RESOURCE +
-                "/" +
-                planCode +
-                AddOn.ADDONS_RESOURCE,
+                        "/" +
+                        planCode +
+                        AddOn.ADDONS_RESOURCE,
                 AddOns.class,
                 params);
     }
@@ -1141,11 +1134,11 @@ public class RecurlyClient {
      */
     public void deleteAddOn(final String planCode, final String addOnCode) {
         doDELETE(Plan.PLANS_RESOURCE +
-                 "/" +
-                 planCode +
-                 AddOn.ADDONS_RESOURCE +
-                 "/" +
-                 addOnCode);
+                "/" +
+                planCode +
+                AddOn.ADDONS_RESOURCE +
+                "/" +
+                addOnCode);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -1192,7 +1185,7 @@ public class RecurlyClient {
      */
     public Redemption redeemCoupon(final String couponCode, final Redemption redemption) {
         return doPOST(Coupon.COUPON_RESOURCE + "/" + couponCode + Redemption.REDEEM_RESOURCE,
-                      redemption, Redemption.class);
+                redemption, Redemption.class);
     }
 
     /**
@@ -1203,7 +1196,7 @@ public class RecurlyClient {
      */
     public Redemption getCouponRedemptionByAccount(final String accountCode) {
         return doGET(Accounts.ACCOUNTS_RESOURCE + "/" + accountCode + Redemption.REDEMPTION_RESOURCE,
-                     Redemption.class);
+                Redemption.class);
     }
 
     /**
@@ -1221,7 +1214,7 @@ public class RecurlyClient {
      * Lookup all coupon redemptions on an account given query params.
      *
      * @param accountCode recurly account id
-     * @param params {@link QueryParams}
+     * @param params      {@link QueryParams}
      * @return the coupon redemptions for this account on success, null otherwise
      */
     public Redemptions getCouponRedemptionsByAccount(final String accountCode, final QueryParams params) {
@@ -1232,10 +1225,9 @@ public class RecurlyClient {
     /**
      * Lookup the first coupon redemption on an invoice.
      *
-     * @deprecated Prefer using Invoice#getId() as the id param (which is a String)
-     *
      * @param invoiceNumber invoice number
      * @return the coupon redemption for this invoice on success, null otherwise
+     * @deprecated Prefer using Invoice#getId() as the id param (which is a String)
      */
     @Deprecated
     public Redemption getCouponRedemptionByInvoice(final Integer invoiceNumber) {
@@ -1257,10 +1249,9 @@ public class RecurlyClient {
     /**
      * Lookup all coupon redemptions on an invoice.
      *
-     * @deprecated Prefer using Invoice#getId() as the id param (which is a String)
-     *
      * @param invoiceNumber invoice number
      * @return the coupon redemptions for this invoice on success, null otherwise
+     * @deprecated Prefer using Invoice#getId() as the id param (which is a String)
      */
     @Deprecated
     public Redemptions getCouponRedemptionsByInvoice(final Integer invoiceNumber) {
@@ -1280,11 +1271,10 @@ public class RecurlyClient {
     /**
      * Lookup all coupon redemptions on an invoice given query params.
      *
-     * @deprecated Prefer using Invoice#getId() as the id param (which is a String)
-     *
      * @param invoiceNumber invoice number
-     * @param params {@link QueryParams}
+     * @param params        {@link QueryParams}
      * @return the coupon redemptions for this invoice on success, null otherwise
+     * @deprecated Prefer using Invoice#getId() as the id param (which is a String)
      */
     @Deprecated
     public Redemptions getCouponRedemptionsByInvoice(final Integer invoiceNumber, final QueryParams params) {
@@ -1295,11 +1285,34 @@ public class RecurlyClient {
      * Lookup all coupon redemptions on an invoice given query params.
      *
      * @param invoiceId String invoice id
-     * @param params {@link QueryParams}
+     * @param params    {@link QueryParams}
      * @return the coupon redemptions for this invoice on success, null otherwise
      */
     public Redemptions getCouponRedemptionsByInvoice(final String invoiceId, final QueryParams params) {
         return doGET(Invoices.INVOICES_RESOURCE + "/" + invoiceId + Redemption.REDEMPTION_RESOURCE,
+                Redemptions.class, params);
+    }
+
+
+    /**
+     * Lookup all coupon redemptions on a subscription.
+     *
+     * @param subscriptionId String invoice id
+     * @return the coupon redemptions for this invoice on success, null otherwise
+     */
+    public Redemptions getCouponRedemptionsBySubscription(final String subscriptionId) {
+        return getCouponRedemptionsBySubscription(subscriptionId, new QueryParams());
+    }
+
+    /**
+     * Lookup all coupon redemptions on a subscription given query params.
+     *
+     * @param subscriptionId String invoice id
+     * @param params         {@link QueryParams}
+     * @return the coupon redemptions for this subscription on success, null otherwise
+     */
+    public Redemptions getCouponRedemptionsBySubscription(final String subscriptionId, final QueryParams params) {
+        return doGET(Subscription.SUBSCRIPTION_RESOURCE + "/" + subscriptionId + Redemption.REDEMPTIONS_RESOURCE,
                 Redemptions.class, params);
     }
 
@@ -1315,7 +1328,7 @@ public class RecurlyClient {
     /**
      * Deletes a specific redemption.
      *
-     * @param accountCode recurly account id
+     * @param accountCode    recurly account id
      * @param redemptionUuid recurly coupon redemption uuid
      */
     public void deleteCouponRedemption(final String accountCode, final String redemptionUuid) {
@@ -1414,7 +1427,7 @@ public class RecurlyClient {
      * <p>
      *
      * @param redemptionCode The redemption code the {@link GiftCard}
-     * @param accountCode The account code for the {@link Account}
+     * @param accountCode    The account code for the {@link Account}
      * @return The updated {@link GiftCard} object as identified by the passed in id
      */
     public GiftCard redeemGiftCard(final String redemptionCode, final String accountCode) {
@@ -1621,8 +1634,7 @@ public class RecurlyClient {
         } catch (ExecutionException e) {
             log.error("Execution error", e);
             return null;
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             log.error("Interrupted while calling Recurly", e);
             return null;
         }
@@ -1637,11 +1649,11 @@ public class RecurlyClient {
         } catch (ExecutionException e) {
             // Extract the errors exception, if any
             if (e.getCause() != null &&
-                e.getCause().getCause() != null &&
-                e.getCause().getCause() instanceof TransactionErrorException) {
+                    e.getCause().getCause() != null &&
+                    e.getCause().getCause() instanceof TransactionErrorException) {
                 throw (TransactionErrorException) e.getCause().getCause();
             } else if (e.getCause() != null &&
-                       e.getCause() instanceof TransactionErrorException) {
+                    e.getCause() instanceof TransactionErrorException) {
                 // See https://github.com/killbilling/recurly-java-library/issues/16
                 throw (TransactionErrorException) e.getCause();
             }
