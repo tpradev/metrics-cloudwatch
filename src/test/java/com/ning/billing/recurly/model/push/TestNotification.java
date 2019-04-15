@@ -178,11 +178,11 @@ public class TestNotification extends TestModelBase {
         final Account account = accountNotification.getAccount();
         Assert.assertNotNull(account);
         Assert.assertEquals(account.getAccountCode(), "1");
-        Assert.assertNull(account.getUsername());
+        Assert.assertNull(account.getUsername(), "username");
         Assert.assertEquals(account.getEmail(), "verena@example.com");
         Assert.assertEquals(account.getFirstName(), "Verena");
         Assert.assertEquals(account.getLastName(), "Example");
-        Assert.assertNull(account.getCompanyName());
+        Assert.assertNull(account.getCompanyName(), "company name");
     }
 
     private void testSubscriptionNotification(final SubscriptionNotification subscriptionNotification) {
@@ -221,7 +221,7 @@ public class TestNotification extends TestModelBase {
         Assert.assertEquals(transaction.getMessage(), "Bogus Gateway: Forced success");
         Assert.assertEquals(transaction.getFailureType(), "Declined by the gateway");
         Assert.assertEquals(transaction.getGatewayErrorCodes(), "00");
-        Assert.assertNull(transaction.getReference());
+        Assert.assertNotNull(transaction.getReference(), "reference");
         Assert.assertTrue(transaction.getTest());
         Assert.assertTrue(transaction.getRefundable());
         Assert.assertTrue(transaction.getVoidable());
@@ -232,7 +232,7 @@ public class TestNotification extends TestModelBase {
         final PushTransaction.VerificationResult cvv = transaction.getCvvResult();
         Assert.assertNotNull(cvv);
         Assert.assertEquals(cvv.getCode(), "");
-        Assert.assertNull(cvv.getMessage());
+        Assert.assertNull(cvv.getMessage(), "message");
 
         final PushTransaction.VerificationResult avs = transaction.getAvsResult();
         Assert.assertNotNull(avs);
@@ -244,12 +244,12 @@ public class TestNotification extends TestModelBase {
         PushInvoice invoice = invoiceNotification.getInvoice();
         Assert.assertNotNull(invoice);
         Assert.assertEquals(invoice.getUuid(), "ffc64d71d4b5404e93f13aac9c63b007");
-        Assert.assertNull(invoice.getSubscriptionId());
+        Assert.assertNull(invoice.getSubscriptionId(), "subscription Id");
         Assert.assertEquals(invoice.getState(), "collected");
-        Assert.assertNull(invoice.getInvoiceNumberPrefix());
+        Assert.assertNotNull(invoice.getInvoiceNumberPrefix(), "invoice number prefix");
         Assert.assertEquals(invoice.getInvoiceNumber(), new Integer(1000));
         Assert.assertEquals(invoice.getPoNumber(), "PO-12345");
-        Assert.assertNull(invoice.getVatNumber());
+        Assert.assertNotNull(invoice.getVatNumber(), "vat number");
         Assert.assertEquals(invoice.getTotalInCents(), new Integer(1100));
         Assert.assertEquals(invoice.getCurrency(), "USD");
         Assert.assertEquals(invoice.getDate(), new DateTime("2014-01-01T20:20:29Z"));

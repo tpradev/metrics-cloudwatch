@@ -17,7 +17,6 @@
 
 package com.ning.billing.recurly.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.Version;
@@ -49,7 +48,7 @@ public abstract class RecurlyObject {
     @XmlTransient
     private RecurlyClient recurlyClient;
 
-    @XmlTransient
+//    @XmlTransient
     protected String href;
 
     public static final String NIL_STR = "nil";
@@ -57,7 +56,7 @@ public abstract class RecurlyObject {
 
     // See https://github.com/killbilling/recurly-java-library/issues/4 for why
     // @JsonIgnore is required here and @XmlTransient is not enough
-    @JsonIgnore
+//    @JsonIgnore
     public String getHref() {
         return href;
     }

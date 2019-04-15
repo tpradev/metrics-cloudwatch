@@ -25,7 +25,7 @@
     <groupId>com.ning.billing</groupId>
     <artifactId>recurly-java-library</artifactId>
     <packaging>jar</packaging>
-    <version>0.11.1</version>
+    <version>0.11.2</version>
     <name>Recurly Java library</name>
     <description>Java library for Recurly</description>
     <url>http://github.com/killbilling/recurly-java-library</url>
@@ -64,27 +64,27 @@
     </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jackson.version>2.5.0</jackson.version>
+        <jackson.version>2.9.8</jackson.version>
+        <!--<jackson.version>2.6.6</jackson.version>-->
         <guava.version>18.0</guava.version>
         <slf4j.version>1.7.10</slf4j.version>
-        <maven.plugin.maven-shade-plugin.version>2.3</maven.plugin.maven-shade-plugin.version>
     </properties>
     <dependencies>
         <!--Changed versions of annotations, core and databind to 2.6.6 from 2.5.0-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>2.6.6</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.6.6</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.6.6</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
@@ -499,25 +499,6 @@
                 <configuration>
                     <generateGitPropertiesFile>true</generateGitPropertiesFile>
                     <generateGitPropertiesFilename>src/main/resources/com/ning/billing/recurly/git.properties</generateGitPropertiesFilename>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>${maven.plugin.maven-shade-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <createDependencyReducedPom>false</createDependencyReducedPom>
-                    <transformers>
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"></transformer>
-                    </transformers>
                 </configuration>
             </plugin>
         </plugins>
