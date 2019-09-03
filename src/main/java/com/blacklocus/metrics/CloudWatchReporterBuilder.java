@@ -16,17 +16,11 @@
 package com.blacklocus.metrics;
 
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync;
-import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsyncClient;
 import com.amazonaws.services.cloudwatch.model.MetricDatum;
-import com.codahale.metrics.Counter;
-import com.codahale.metrics.Gauge;
-import com.codahale.metrics.Histogram;
-import com.codahale.metrics.Meter;
 import com.codahale.metrics.Metric;
 import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
-import com.codahale.metrics.Timer;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
@@ -51,15 +45,6 @@ public class CloudWatchReporterBuilder {
     private MetricFilter filter;
     private String dimensions;
     private Boolean timestampLocal;
-
-    private String typeDimName;
-    private String typeDimValGauge;
-    private String typeDimValCounterCount;
-    private String typeDimValMeterCount;
-    private String typeDimValHistoSamples;
-    private String typeDimValHistoStats;
-    private String typeDimValTimerSamples;
-    private String typeDimValTimerStats;
 
     private Predicate<MetricDatum> reporterFilter;
 
@@ -121,93 +106,6 @@ public class CloudWatchReporterBuilder {
 
 
     /**
-     * @param typeDimName name of the "metric type" dimension added to CloudWatch submissions.
-     *                    Defaults to <b>{@value Constants#DEF_DIM_NAME_TYPE}</b> when using the CloudWatchReporterBuilder
-     * @return this (for chaining)
-     */
-    public CloudWatchReporterBuilder withTypeDimName(String typeDimName) {
-        this.typeDimName = typeDimName;
-        return this;
-    }
-
-    /**
-     * @param typeDimValGauge value of the "metric type" dimension added to CloudWatch submissions of {@link Gauge}s.
-     *                        Defaults to <b>{@value Constants#DEF_DIM_VAL_GAUGE}</b>
-     *                        when using the CloudWatchReporterBuilder
-     * @return this (for chaining)
-     */
-    public CloudWatchReporterBuilder withTypeDimValGauge(String typeDimValGauge) {
-        this.typeDimValGauge = typeDimValGauge;
-        return this;
-    }
-
-    /**
-     * @param typeDimValCounterCount value of the "metric type" dimension added to CloudWatch submissions of
-     *                               {@link Counter#getCount()}.
-     *                               Defaults to <b>{@value Constants#DEF_DIM_VAL_COUNTER_COUNT}</b> when using the CloudWatchReporterBuilder
-     * @return this (for chaining)
-     */
-    public CloudWatchReporterBuilder withTypeDimValCounterCount(String typeDimValCounterCount) {
-        this.typeDimValCounterCount = typeDimValCounterCount;
-        return this;
-    }
-
-    /**
-     * @param typeDimValMeterCount value of the "metric type" dimension added to CloudWatch submissions of
-     *                             {@link Meter#getCount()}.
-     *                             Defaults to <b>{@value Constants#DEF_DIM_VAL_METER_COUNT}</b> when using the CloudWatchReporterBuilder
-     * @return this (for chaining)
-     */
-    public CloudWatchReporterBuilder withTypeDimValMeterCount(String typeDimValMeterCount) {
-        this.typeDimValMeterCount = typeDimValMeterCount;
-        return this;
-    }
-
-    /**
-     * @param typeDimValHistoSamples value of the "metric type" dimension added to CloudWatch submissions of
-     *                               {@link Histogram#getCount()}.
-     *                               Defaults to <b>{@value Constants#DEF_DIM_VAL_HISTO_SAMPLES}</b> when using the CloudWatchReporterBuilder
-     * @return this (for chaining)
-     */
-    public CloudWatchReporterBuilder withTypeDimValHistoSamples(String typeDimValHistoSamples) {
-        this.typeDimValHistoSamples = typeDimValHistoSamples;
-        return this;
-    }
-
-    /**
-     * @param typeDimValHistoStats value of the "metric type" dimension added to CloudWatch submissions of
-     *                             {@link Histogram#getSnapshot()}.
-     *                             Defaults to <b>{@value Constants#DEF_DIM_VAL_HISTO_STATS}</b> when using the CloudWatchReporterBuilder
-     * @return this (for chaining)
-     */
-    public CloudWatchReporterBuilder withTypeDimValHistoStats(String typeDimValHistoStats) {
-        this.typeDimValHistoStats = typeDimValHistoStats;
-        return this;
-    }
-
-    /**
-     * @param typeDimValTimerSamples value of the "metric type" dimension added to CloudWatch submissions of
-     *                               {@link Timer#getCount()}.
-     *                               Defaults to <b>{@value Constants#DEF_DIM_VAL_TIMER_SAMPLES}</b> when using the CloudWatchReporterBuilder
-     * @return this (for chaining)
-     */
-    public CloudWatchReporterBuilder withTypeDimValTimerSamples(String typeDimValTimerSamples) {
-        this.typeDimValTimerSamples = typeDimValTimerSamples;
-        return this;
-    }
-
-    /**
-     * @param typeDimValTimerStats value of the "metric type" dimension added to CloudWatch submissions of
-     *                             {@link Timer#getSnapshot()}.
-     *                             Defaults to <b>{@value Constants#DEF_DIM_VAL_TIMER_STATS}</b> when using the CloudWatchReporterBuilder
-     * @return this (for chaining)
-     */
-    public CloudWatchReporterBuilder withTypeDimValTimerStats(String typeDimValTimerStats) {
-        this.typeDimValTimerStats = typeDimValTimerStats;
-        return this;
-    }
-
-    /**
      * This filter is applied right before submission to CloudWatch. This filter can access decoded metric name elements
      * such as {@link MetricDatum#getDimensions()}. true means to keep and submit the metric. false means to exclude it.
      * <p>
@@ -227,72 +125,28 @@ public class CloudWatchReporterBuilder {
         return this;
     }
 
-
-    /**
-     * @return a shallow copy of this builder
-     */
-    public CloudWatchReporterBuilder copy() {
-        return new CloudWatchReporterBuilder()
-                .withRegistry(registry)
-                .withNamespace(namespace)
-                .withClient(client)
-                .withFilter(filter)
-                .withDimensions(dimensions)
-                .withTimestampLocal(timestampLocal)
-                .withTypeDimName(typeDimName)
-                .withTypeDimValGauge(typeDimValGauge)
-                .withTypeDimValCounterCount(typeDimValCounterCount)
-                .withTypeDimValMeterCount(typeDimValMeterCount)
-                .withTypeDimValHistoSamples(typeDimValHistoSamples)
-                .withTypeDimValHistoStats(typeDimValHistoStats)
-                .withTypeDimValTimerSamples(typeDimValTimerSamples)
-                .withTypeDimValTimerStats(typeDimValTimerStats)
-                .withReporterFilter(reporterFilter);
-    }
-
     /**
      * @return a new CloudWatchReporter instance based on the state of this builder
      */
     public CloudWatchReporter build() {
         Preconditions.checkState(!Strings.isNullOrEmpty(namespace), "Metric namespace is required.");
 
-        String resolvedNamespace = namespace;
-
         // Use specified or fall back to default. Don't secretly modify the fields of this builder
         // in case the caller wants to re-use it to build other reporters, or something.
 
-        MetricRegistry resolvedRegistry = null != registry ? registry : new MetricRegistry();
         MetricFilter resolvedFilter = null != filter ? filter : MetricFilter.ALL;
-        AmazonCloudWatchAsync resolvedCloudWatchClient = null != client ? client : new AmazonCloudWatchAsyncClient();
         String resolvedDimensions = null != dimensions ? dimensions : null;
         Boolean resolvedTimestampLocal = null != timestampLocal ? timestampLocal : false;
-
-        String resolvedTypeDimName = null != typeDimName ? typeDimName : Constants.DEF_DIM_NAME_TYPE;
-        String resolvedTypeDimValGauge = null != typeDimValGauge ? typeDimValGauge : Constants.DEF_DIM_VAL_GAUGE;
-        String resolvedTypeDimValCounterCount = null != typeDimValCounterCount ? typeDimValCounterCount : Constants.DEF_DIM_VAL_COUNTER_COUNT;
-        String resolvedTypeDimValMeterCount = null != typeDimValMeterCount ? typeDimValMeterCount : Constants.DEF_DIM_VAL_METER_COUNT;
-        String resolvedTypeDimValHistoSamples = null != typeDimValHistoSamples ? typeDimValHistoSamples : Constants.DEF_DIM_VAL_HISTO_SAMPLES;
-        String resolvedTypeDimValHistoStats = null != typeDimValHistoStats ? typeDimValHistoStats : Constants.DEF_DIM_VAL_HISTO_STATS;
-        String resolvedTypeDimValTimerSamples = null != typeDimValTimerSamples ? typeDimValTimerSamples : Constants.DEF_DIM_VAL_TIMER_SAMPLES;
-        String resolvedTypeDimValTimerStats = null != typeDimValTimerStats ? typeDimValTimerStats : Constants.DEF_DIM_VAL_TIMER_STATS;
 
         Predicate<MetricDatum> resolvedReporterFilter = null != reporterFilter ? reporterFilter : Predicates.<MetricDatum>alwaysTrue();
 
         return new CloudWatchReporter(
-                resolvedRegistry,
-                resolvedNamespace,
+                registry,
+                namespace,
                 resolvedFilter,
-                resolvedCloudWatchClient)
+                client)
                 .withDimensions(resolvedDimensions)
-                .withTimestampLocal(resolvedTimestampLocal)
-                .withTypeDimName(resolvedTypeDimName)
-                .withTypeDimValGauge(resolvedTypeDimValGauge)
-                .withTypeDimValCounterCount(resolvedTypeDimValCounterCount)
-                .withTypeDimValMeterCount(resolvedTypeDimValMeterCount)
-                .withTypeDimValHistoSamples(resolvedTypeDimValHistoSamples)
-                .withTypeDimValHistoStats(resolvedTypeDimValHistoStats)
-                .withTypeDimValTimerSamples(resolvedTypeDimValTimerSamples)
-                .withTypeDimValTimerStats(resolvedTypeDimValTimerStats)
-                .withReporterFilter(resolvedReporterFilter);
+                .withReporterFilter(resolvedReporterFilter)
+                .withTimestampLocal(resolvedTimestampLocal);
     }
 }

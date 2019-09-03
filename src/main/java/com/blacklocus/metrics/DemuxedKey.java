@@ -69,19 +69,10 @@ class DemuxedKey {
     }
 
     /**
-     * @param typeName           dimension name to use for the metric type dimension
-     * @param typeValue          dimension value to use for the metric type dimension
      * @param datumSpecification writes the metric's data into to the prepared MetricDatum
      * @return the generated <i>datums</i> which should be ready for submission to CloudWath
      */
-    Iterable<MetricDatum> newDatums(String typeName, String typeValue, Function<MetricDatum, MetricDatum> datumSpecification) {
-
-        // All dimension sets include the type dimension.
-        PermutableChain<Dimension> withDimensionChain = new PermutableChain<Dimension>(
-                new Dimension().withName(typeName).withValue(typeValue),
-                false,
-                dimensionChain
-        );
+    Iterable<MetricDatum> newDatums(Function<MetricDatum, MetricDatum> datumSpecification) {
 
         List<MetricDatum> data = new ArrayList<MetricDatum>();
 
@@ -92,7 +83,7 @@ class DemuxedKey {
                 // This is expected and supported but of course can not be submitted.
                 continue;
             }
-            for (Iterable<Dimension> dimensionSet : withDimensionChain) {
+            for (Iterable<Dimension> dimensionSet : dimensionChain) {
                 data.add(datumSpecification.apply(
                         new MetricDatum().withMetricName(name).withDimensions(Lists.newArrayList(dimensionSet))
                 ));
@@ -101,81 +92,82 @@ class DemuxedKey {
 
         return data;
     }
-}
 
-class PermutableChain<T> implements Iterable<Iterable<T>> {
+    public class PermutableChain<T> implements Iterable<Iterable<T>> {
 
-    final T token;
-    final boolean permutable;
-    final PermutableChain<T> nextSegment;
+        final T token;
+        final boolean permutable;
+        final PermutableChain<T> nextSegment;
 
 
-    PermutableChain(T token, boolean permutable, PermutableChain<T> nextSegment) {
-        this.token = token;
-        this.permutable = permutable;
-        this.nextSegment = nextSegment;
-    }
+        PermutableChain(T token, boolean permutable, PermutableChain<T> nextSegment) {
+            this.token = token;
+            this.permutable = permutable;
+            this.nextSegment = nextSegment;
+        }
 
-    @Override
-    public Iterator<Iterable<T>> iterator() {
-        return new Iterator<Iterable<T>>() {
+        @Override
+        public Iterator<Iterable<T>> iterator() {
+            return new Iterator<Iterable<T>>() {
 
-            int permutation = permutable ? 2 : 1;
-            Iterator<Iterable<T>> nextSegmentIt = nextSegment == null ? null : nextSegment.iterator();
+                int permutation = permutable ? 2 : 1;
+                Iterator<Iterable<T>> nextSegmentIt = nextSegment == null ? null : nextSegment.iterator();
 
-            @Override
-            public boolean hasNext() {
-                boolean isTail = nextSegmentIt == null;
-                if (isTail) {
-                    return permutation > 0;
-                } else {
-                    return permutation > 0 && nextSegmentIt != null && nextSegmentIt.hasNext();
-                }
-            }
-
-            @Override
-            public Iterable<T> next() {
-                assert permutation > 0 && permutation <= 2;
-                boolean isTail = nextSegmentIt == null;
-                if (isTail) {
-                    if (permutation == 2) {
-                        permutation = 1;
-                        return Collections.emptyList();
+                @Override
+                public boolean hasNext() {
+                    boolean isTail = nextSegmentIt == null;
+                    if (isTail) {
+                        return permutation > 0;
                     } else {
-                        assert permutation == 1;
-                        permutation = 0;
-                        return ImmutableList.of(token);
+                        return permutation > 0 && nextSegmentIt != null && nextSegmentIt.hasNext();
                     }
-                } else {
-                    if (permutation == 2) {
-                        Iterable<T> next = nextSegmentIt.next();
-                        if (!nextSegmentIt.hasNext()) {
+                }
+
+                @Override
+                public Iterable<T> next() {
+                    assert permutation > 0 && permutation <= 2;
+                    boolean isTail = nextSegmentIt == null;
+                    if (isTail) {
+                        if (permutation == 2) {
                             permutation = 1;
-                            nextSegmentIt = nextSegment.iterator();
-                        }
-                        return next;
-                    } else {
-                        assert permutation == 1;
-                        Iterable<T> next = Iterables.concat(ImmutableList.of(token), nextSegmentIt.next());
-                        if (!nextSegmentIt.hasNext()) {
+                            return Collections.emptyList();
+                        } else {
+                            assert permutation == 1;
                             permutation = 0;
-                            nextSegmentIt = null;
+                            return ImmutableList.of(token);
                         }
-                        return next;
+                    } else {
+                        if (permutation == 2) {
+                            Iterable<T> next = nextSegmentIt.next();
+                            if (!nextSegmentIt.hasNext()) {
+                                permutation = 1;
+                                nextSegmentIt = nextSegment.iterator();
+                            }
+                            return next;
+                        } else {
+                            assert permutation == 1;
+                            Iterable<T> next = Iterables.concat(ImmutableList.of(token), nextSegmentIt.next());
+                            if (!nextSegmentIt.hasNext()) {
+                                permutation = 0;
+                                nextSegmentIt = null;
+                            }
+                            return next;
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException("Nope.");
-            }
-        };
-    }
+                @Override
+                public void remove() {
+                    throw new UnsupportedOperationException("Nope.");
+                }
+            };
+        }
     /*
     Three option*
     hasNext == tail && exhausted || next.hasNext()   next: return
     Three -> ""
     Three -> option
      */
+    }
+
 }

@@ -1,12 +1,12 @@
 /**
  * Copyright 2013-2016 BlackLocus
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,6 +52,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+
+import static com.blacklocus.metrics.Constants.*;
 
 /**
  * New users should obtain a reporter via a {@link CloudWatchReporterBuilder}! The reporter constructors remain
@@ -103,65 +105,8 @@ public class CloudWatchReporter extends ScheduledReporter {
     @Deprecated
     public static final String VALID_DIMENSION_PART_RGX = Constants.VALID_DIMENSION_PART_RGX;
 
-    /**
-     * @deprecated maintained for backwards compatibility. Will eventually be replaced by
-     * {@link Constants#DEF_DIM_NAME_TYPE}. The default value will change from
-     * <b>{@value #METRIC_TYPE_DIMENSION}</b> to <b>{@value Constants#DEF_DIM_NAME_TYPE}</b>
-     */
-    @Deprecated
-    public static final String METRIC_TYPE_DIMENSION = "type";
 
-    /**
-     * @deprecated maintained for backwards compatibility. Will eventually be replaced by
-     * {@link Constants#DEF_DIM_VAL_COUNTER_COUNT}. The default value will change from
-     * <b>{@value #DEF_DIM_VAL_COUNTER_COUNT}</b> to <b>{@value Constants#DEF_DIM_VAL_COUNTER_COUNT}</b>
-     */
-    @Deprecated
-    public static final String DEF_DIM_VAL_COUNTER_COUNT = "counterSum";
 
-    /**
-     * @deprecated maintained for backwards compatibility. Will eventually be replaced by
-     * {@link Constants#DEF_DIM_VAL_METER_COUNT}. The default value will change from
-     * <b>{@value #DEF_DIM_VAL_METER_COUNT}</b> to <b>{@value Constants#DEF_DIM_VAL_METER_COUNT}</b>
-     */
-    @Deprecated
-    public static final String DEF_DIM_VAL_METER_COUNT = "meterSum";
-
-    /**
-     * @deprecated maintained for backwards compatibility. Will eventually be replaced by
-     * {@link Constants#DEF_DIM_VAL_HISTO_SAMPLES}. The default value will change from
-     * <b>{@value #DEF_DIM_VAL_HISTO_SAMPLES}</b> to <b>{@value Constants#DEF_DIM_VAL_HISTO_SAMPLES}</b>
-     */
-    @Deprecated
-    public static final String DEF_DIM_VAL_HISTO_SAMPLES = "histogramCount";
-
-    /**
-     * @deprecated maintained for backwards compatibility. Will eventually be replaced by
-     * {@link Constants#DEF_DIM_VAL_HISTO_STATS}. The default value will change from
-     * <b>{@value #DEF_DIM_VAL_HISTO_STATS}</b> to <b>{@value Constants#DEF_DIM_VAL_HISTO_STATS}</b>
-     */
-    @Deprecated
-    public static final String DEF_DIM_VAL_HISTO_STATS = "histogramSet";
-
-    /**
-     * @deprecated maintained for backwards compatibility. Will eventually be replaced by
-     * {@link Constants#DEF_DIM_VAL_TIMER_SAMPLES}. The default value will change from
-     * <b>{@value #DEF_DIM_VAL_TIMER_SAMPLES}</b> to <b>{@value Constants#DEF_DIM_VAL_TIMER_SAMPLES}</b>
-     */
-    @Deprecated
-    public static final String DEF_DIM_VAL_TIMER_SAMPLES = "timerCount";
-
-    /**
-     * @deprecated maintained for backwards compatibility. Will eventually be replaced by
-     * {@link Constants#DEF_DIM_VAL_TIMER_STATS}. The default value will change from
-     * <b>{@value #DEF_DIM_VAL_TIMER_STATS}</b> to <b>{@value Constants#DEF_DIM_VAL_TIMER_STATS}</b>
-     */
-    @Deprecated
-    public static final String DEF_DIM_VAL_TIMER_STATS = "timerSet";
-
-    /**
-     * @deprecated to be removed from CloudWatchReporter. Use {@link MetricFilter#ALL}
-     */
     @Deprecated
     static final MetricFilter ALL = MetricFilter.ALL;
 
@@ -204,20 +149,6 @@ public class CloudWatchReporter extends ScheduledReporter {
      * particular filter.
      */
     private Predicate<MetricDatum> reporterFilter = Predicates.alwaysTrue();
-
-    // These defaults are deprecated but are maintained for backwards compatibility.
-    // The CloudWatchReporterBuilder, introduced later, uses the new defaults which
-    // better reflect the translations of each code hale metric class to cloudwatch.
-
-    private String typeDimName = METRIC_TYPE_DIMENSION;
-    private String typeDimValGauge = Constants.DEF_DIM_VAL_GAUGE;  // default gauge type dimension did not change
-    private String typeDimValCounterCount = DEF_DIM_VAL_COUNTER_COUNT;
-    private String typeDimValMeterCount = DEF_DIM_VAL_METER_COUNT;
-    private String typeDimValHistoSamples = DEF_DIM_VAL_HISTO_SAMPLES;
-    private String typeDimValHistoStats = DEF_DIM_VAL_HISTO_STATS;
-    private String typeDimValTimerSamples = DEF_DIM_VAL_TIMER_SAMPLES;
-    private String typeDimValTimerStats = DEF_DIM_VAL_TIMER_STATS;
-
 
     /**
      * Creates a new {@link ScheduledReporter} instance. The reporter does not report metrics until
@@ -287,107 +218,6 @@ public class CloudWatchReporter extends ScheduledReporter {
         return this;
     }
 
-    /**
-     * @param typeDimName name of the "metric type" dimension added to CloudWatch submissions.
-     *                    Defaults to <b>{@value #METRIC_TYPE_DIMENSION}</b> when using
-     *                    CloudWatchReporter constructors directly (backwards-compatibility) or
-     *                    <b>{@value Constants#DEF_DIM_NAME_TYPE}</b> when using the CloudWatchReporterBuilder
-     * @return this (for chaining)
-     */
-    public CloudWatchReporter withTypeDimName(String typeDimName) {
-        this.typeDimName = typeDimName;
-        return this;
-    }
-
-    /**
-     * @param typeDimValGauge value of the "metric type" dimension added to CloudWatch submissions of {@link Gauge}s.
-     *                        Defaults to <b>{@value Constants#DEF_DIM_VAL_GAUGE}</b> when using either
-     *                        CloudWatchReporter constructors directly (backwards-compatibility) or
-     *                        when using the CloudWatchReporterBuilder
-     * @return this (for chaining)
-     */
-    public CloudWatchReporter withTypeDimValGauge(String typeDimValGauge) {
-        this.typeDimValGauge = typeDimValGauge;
-        return this;
-    }
-
-    /**
-     * @param typeDimValCounterCount value of the "metric type" dimension added to CloudWatch submissions of
-     *                               {@link Counter#getCount()}.
-     *                               Defaults to <b>{@value #DEF_DIM_VAL_COUNTER_COUNT}</b> when using
-     *                               CloudWatchReporter constructors directly (backwards-compatibility) or
-     *                               <b>{@value Constants#DEF_DIM_VAL_COUNTER_COUNT}</b> when using the CloudWatchReporterBuilder
-     * @return this (for chaining)
-     */
-    public CloudWatchReporter withTypeDimValCounterCount(String typeDimValCounterCount) {
-        this.typeDimValCounterCount = typeDimValCounterCount;
-        return this;
-    }
-
-    /**
-     * @param typeDimValMeterCount value of the "metric type" dimension added to CloudWatch submissions of
-     *                             {@link Meter#getCount()}.
-     *                             Defaults to <b>{@value #DEF_DIM_VAL_METER_COUNT}</b> when using
-     *                             CloudWatchReporter constructors directly (backwards-compatibility) or
-     *                             <b>{@value Constants#DEF_DIM_VAL_METER_COUNT}</b> when using the CloudWatchReporterBuilder
-     * @return this (for chaining)
-     */
-    public CloudWatchReporter withTypeDimValMeterCount(String typeDimValMeterCount) {
-        this.typeDimValMeterCount = typeDimValMeterCount;
-        return this;
-    }
-
-    /**
-     * @param typeDimValHistoSamples value of the "metric type" dimension added to CloudWatch submissions of
-     *                               {@link Histogram#getCount()}.
-     *                               Defaults to <b>{@value #DEF_DIM_VAL_HISTO_SAMPLES}</b> when using
-     *                               CloudWatchReporter constructors directly (backwards-compatibility) or
-     *                               <b>{@value Constants#DEF_DIM_VAL_HISTO_SAMPLES}</b> when using the CloudWatchReporterBuilder
-     * @return this (for chaining)
-     */
-    public CloudWatchReporter withTypeDimValHistoSamples(String typeDimValHistoSamples) {
-        this.typeDimValHistoSamples = typeDimValHistoSamples;
-        return this;
-    }
-
-    /**
-     * @param typeDimValHistoStats value of the "metric type" dimension added to CloudWatch submissions of
-     *                             {@link Histogram#getSnapshot()}.
-     *                             Defaults to <b>{@value #DEF_DIM_VAL_HISTO_STATS}</b> when using
-     *                             CloudWatchReporter constructors directly (backwards-compatibility) or
-     *                             <b>{@value Constants#DEF_DIM_VAL_HISTO_STATS}</b> when using the CloudWatchReporterBuilder
-     * @return this (for chaining)
-     */
-    public CloudWatchReporter withTypeDimValHistoStats(String typeDimValHistoStats) {
-        this.typeDimValHistoStats = typeDimValHistoStats;
-        return this;
-    }
-
-    /**
-     * @param typeDimValTimerSamples value of the "metric type" dimension added to CloudWatch submissions of
-     *                               {@link Timer#getCount()}.
-     *                               Defaults to <b>{@value #DEF_DIM_VAL_TIMER_SAMPLES}</b> when using
-     *                               CloudWatchReporter constructors directly (backwards-compatibility) or
-     *                               <b>{@value Constants#DEF_DIM_VAL_TIMER_SAMPLES}</b> when using the CloudWatchReporterBuilder
-     * @return this (for chaining)
-     */
-    public CloudWatchReporter withTypeDimValTimerSamples(String typeDimValTimerSamples) {
-        this.typeDimValTimerSamples = typeDimValTimerSamples;
-        return this;
-    }
-
-    /**
-     * @param typeDimValTimerStats value of the "metric type" dimension added to CloudWatch submissions of
-     *                             {@link Timer#getSnapshot()}.
-     *                             Defaults to <b>{@value #DEF_DIM_VAL_TIMER_STATS}</b> when using
-     *                             CloudWatchReporter constructors directly (backwards-compatibility) or
-     *                             <b>{@value Constants#DEF_DIM_VAL_TIMER_STATS}</b> when using the CloudWatchReporterBuilder
-     * @return this (for chaining)
-     */
-    public CloudWatchReporter withTypeDimValTimerStats(String typeDimValTimerStats) {
-        this.typeDimValTimerStats = typeDimValTimerStats;
-        return this;
-    }
 
     /**
      * This filter is applied right before submission to CloudWatch. This filter can access decoded metric name elements
@@ -424,21 +254,21 @@ public class CloudWatchReporter extends ScheduledReporter {
 
             // Translate various metric classes to MetricDatum
             for (Map.Entry<String, Gauge> gaugeEntry : gauges.entrySet()) {
-                reportGauge(gaugeEntry, typeDimValGauge, data);
+                reportGauge(gaugeEntry, data);
             }
             for (Map.Entry<String, Counter> counterEntry : counters.entrySet()) {
-                reportCounter(counterEntry, typeDimValCounterCount, data);
+                reportCounter(counterEntry, data);
             }
             for (Map.Entry<String, Meter> meterEntry : meters.entrySet()) {
-                reportCounter(meterEntry, typeDimValMeterCount, data);
+                reportCounter(meterEntry, data);
             }
             for (Map.Entry<String, Histogram> histogramEntry : histograms.entrySet()) {
-                reportCounter(histogramEntry, typeDimValHistoSamples, data);
-                reportSampling(histogramEntry, typeDimValHistoStats, 1.0, data);
+                reportCounter(histogramEntry, data);
+                reportSampling(histogramEntry, 1.0, data);
             }
             for (Map.Entry<String, Timer> timerEntry : timers.entrySet()) {
-                reportCounter(timerEntry, typeDimValTimerSamples, data);
-                reportSampling(timerEntry, typeDimValTimerStats, 0.000001, data); // nanos -> millis
+                reportCounter(timerEntry, data);
+                reportSampling(timerEntry, 0.000001, data); // nanos -> millis
             }
 
             // Filter out unreportable entries.
@@ -498,7 +328,7 @@ public class CloudWatchReporter extends ScheduledReporter {
     }
 
 
-    void reportGauge(Map.Entry<String, Gauge> gaugeEntry, String typeDimValue, List<MetricDatum> data) {
+    void reportGauge(Map.Entry<String, Gauge> gaugeEntry, List<MetricDatum> data) {
         Gauge gauge = gaugeEntry.getValue();
 
         Object valueObj = gauge.getValue();
@@ -510,30 +340,58 @@ public class CloudWatchReporter extends ScheduledReporter {
         if (NumberUtils.isNumber(valueStr)) {
             final Number value = NumberUtils.createNumber(valueStr);
 
-            DemuxedKey key = new DemuxedKey(appendGlobalDimensions(gaugeEntry.getKey()));
-            Iterables.addAll(data, key.newDatums(typeDimName, typeDimValue, new Function<MetricDatum, MetricDatum>() {
+            String nameAndDimensions = StringUtils.substringBeforeLast(gaugeEntry.getKey(), NAME_STORAGE_RESOLUTION_TOKEN);
+            String resolutionAndTimestamp = StringUtils.substringAfterLast(gaugeEntry.getKey(), NAME_STORAGE_RESOLUTION_TOKEN);
+            final String resolution = StringUtils.substringBeforeLast(resolutionAndTimestamp, NAME_TIMESTAMP_TOKEN);
+            final String timestamp = StringUtils.substringAfterLast(resolutionAndTimestamp, NAME_TIMESTAMP_TOKEN);
+
+            DemuxedKey key = new DemuxedKey(appendGlobalDimensions(nameAndDimensions));
+            Iterables.addAll(data, key.newDatums(new Function<MetricDatum, MetricDatum>() {
                 @Override
                 public MetricDatum apply(MetricDatum datum) {
-                    return datum.withValue(value.doubleValue());
+                    return datum.withValue(value.doubleValue())
+                            .withStorageResolution(Integer.valueOf(resolution))
+                            .withTimestamp(new Date(Long.parseLong(timestamp)));
                 }
             }));
         }
     }
 
-    void reportCounter(Map.Entry<String, ? extends Counting> entry, String typeDimValue, List<MetricDatum> data) {
+    void reportCounter(Map.Entry<String, ? extends Counting> entry, List<MetricDatum> data) {
         Counting metric = entry.getValue();
         final long diff = diffLast(metric);
         if (diff == 0) {
-            // Don't submit metrics that have not changed. No reason to keep these alive. Also saves on CloudWatch
-            // costs.
             return;
         }
 
-        DemuxedKey key = new DemuxedKey(appendGlobalDimensions(entry.getKey()));
-        Iterables.addAll(data, key.newDatums(typeDimName, typeDimValue, new Function<MetricDatum, MetricDatum>() {
+        String groupedName = entry.getKey();
+        String counterName;
+        final String timestamp;
+        if (StringUtils.contains(groupedName, NAME_SAMPLING_TOKEN)) {
+            counterName = StringUtils.substringBetween(groupedName, NAME_COUNTER_TOKEN, NAME_SAMPLING_TOKEN);
+            timestamp = StringUtils.substringBetween(groupedName, NAME_TIMESTAMP_TOKEN, NAME_UNIT_TOKEN);
+        } else {
+            counterName = StringUtils.substringBetween(groupedName, NAME_COUNTER_TOKEN, NAME_METRIC_DIMENSION_SEPARATOR);
+            timestamp = StringUtils.substringAfterLast(groupedName, NAME_TIMESTAMP_TOKEN);
+        }
+
+        if (counterName == null || counterName.equals("null")) {
+            return;
+        }
+
+        String dimensions = StringUtils.substringBetween(groupedName, NAME_METRIC_DIMENSION_SEPARATOR, NAME_STORAGE_RESOLUTION_TOKEN);
+        final String resolution = StringUtils.substringBetween(groupedName, NAME_STORAGE_RESOLUTION_TOKEN, NAME_TIMESTAMP_TOKEN);
+
+        String nameAndDimensions = counterName + NAME_TOKEN_DELIMITER + dimensions;
+
+        DemuxedKey key = new DemuxedKey(appendGlobalDimensions(nameAndDimensions));
+        Iterables.addAll(data, key.newDatums(new Function<MetricDatum, MetricDatum>() {
             @Override
             public MetricDatum apply(MetricDatum datum) {
-                return datum.withValue((double) diff).withUnit(StandardUnit.Count);
+                return datum.withValue((double) diff)
+                        .withUnit(StandardUnit.Count)
+                        .withStorageResolution(Integer.valueOf(resolution))
+                        .withTimestamp(new Date(Long.parseLong(timestamp)));
             }
         }));
     }
@@ -541,7 +399,7 @@ public class CloudWatchReporter extends ScheduledReporter {
     /**
      * @param rescale the submitted sum by this multiplier. 1.0 is the identity (no rescale).
      */
-    void reportSampling(Map.Entry<String, ? extends Sampling> entry, String typeDimValue, double rescale, List<MetricDatum> data) {
+    void reportSampling(Map.Entry<String, ? extends Sampling> entry, double rescale, List<MetricDatum> data) {
         Sampling metric = entry.getValue();
         Snapshot snapshot = metric.getSnapshot();
         double scaledSum = sum(snapshot.getValues()) * rescale;
@@ -551,11 +409,22 @@ public class CloudWatchReporter extends ScheduledReporter {
                 .withMinimum((double) snapshot.getMin() * rescale)
                 .withMaximum((double) snapshot.getMax() * rescale);
 
-        DemuxedKey key = new DemuxedKey(appendGlobalDimensions(entry.getKey()));
-        Iterables.addAll(data, key.newDatums(typeDimName, typeDimValue, new Function<MetricDatum, MetricDatum>() {
+        String groupedName = entry.getKey();
+        String samplingName = StringUtils.substringBetween(groupedName, NAME_SAMPLING_TOKEN, NAME_METRIC_DIMENSION_SEPARATOR);
+        String dimensions = StringUtils.substringBetween(groupedName, NAME_METRIC_DIMENSION_SEPARATOR, NAME_STORAGE_RESOLUTION_TOKEN);
+        final String resolution = StringUtils.substringBetween(groupedName, NAME_STORAGE_RESOLUTION_TOKEN, NAME_TIMESTAMP_TOKEN);
+        final String timestamp = StringUtils.substringBetween(groupedName, NAME_TIMESTAMP_TOKEN, NAME_UNIT_TOKEN);
+        final String unit = StringUtils.substringAfterLast(groupedName, NAME_UNIT_TOKEN);
+
+        String nameAndDimensions = samplingName + NAME_TOKEN_DELIMITER + dimensions;
+
+        DemuxedKey key = new DemuxedKey(appendGlobalDimensions(nameAndDimensions));
+        Iterables.addAll(data, key.newDatums(new Function<MetricDatum, MetricDatum>() {
             @Override
             public MetricDatum apply(MetricDatum datum) {
-                return datum.withStatisticValues(statisticSet);
+                return datum.withStatisticValues(statisticSet).withUnit(unit)
+                        .withStorageResolution(Integer.valueOf(resolution))
+                        .withTimestamp(new Date(Long.parseLong(timestamp)));
             }
         }));
     }

@@ -42,22 +42,23 @@ class ExampleMetrics {
     }
 }
 
-public class ExampleApp {
 
-    private final ExampleMetrics exampleMetrics;
+    public class ExampleApp {
 
-    public ExampleApp(ExampleMetrics exampleMetrics) {
-        this.exampleMetrics = exampleMetrics;
+        private final ExampleMetrics exampleMetrics;
+
+        public ExampleApp(ExampleMetrics exampleMetrics) {
+            this.exampleMetrics = exampleMetrics;
+        }
+
+        public void sendAThing() {
+            // ... somewhere in the code not so far away ...
+            exampleMetrics.sentThatThing();
+        }
+
+        public void receiveSomeThings(List<Object> thoseThings) {
+            exampleMetrics.gotABatchOfThoseThingsYaSentMe(thoseThings.size());
+            // ... and so on ...
+        }
     }
-
-    public void sendAThing() {
-        // ... somewhere in the code not so far away ...
-        exampleMetrics.sentThatThing();
-    }
-
-    public void receiveSomeThings(List<Object> thoseThings) {
-        exampleMetrics.gotABatchOfThoseThingsYaSentMe(thoseThings.size());
-        // ... and so on ...
-    }
-}
 

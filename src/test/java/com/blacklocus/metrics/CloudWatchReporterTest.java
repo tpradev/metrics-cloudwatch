@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class CloudWatchReporterTest {
 
-    @Test
+   // @Test
     @Ignore("ad-hoc usage")
     public void createTestData() throws InterruptedException {
 
