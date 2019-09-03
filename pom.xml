@@ -51,4 +51,170 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <properties>
+        <!-- Maven Properties-->
+        <maven.version>3.3.9</maven.version>
+
+        <!-- Plugin Properties -->
+        <maven.plugin.maven-enforcer-plugin.version>1.4</maven.plugin.maven-enforcer-plugin.version>
+        <maven.plugin.versions-maven-plugin.version>2.2</maven.plugin.versions-maven-plugin.version>
+        <maven.plugin.maven-clean-plugin.version>3.0.0</maven.plugin.maven-clean-plugin.version>
+        <maven.plugin.maven-jar-plugin.version>2.4</maven.plugin.maven-jar-plugin.version>
+        <maven.plugin.maven-surefire-plugin.version>2.19.1</maven.plugin.maven-surefire-plugin.version>
+
+        <!-- Java Source and Target Versions-->
+        <java.source.version>1.6</java.source.version>
+        <java.target.version>1.6</java.target.version>
+
+        <!-- Extension Properties -->
+        <maven.extension.file-wagon.version>1.0-beta-6</maven.extension.file-wagon.version>
+
+        <!-- Repository Locations -->
+        <sdk.repository.location>s3://repository.tplinkra.com</sdk.repository.location>
+        <sdk.repository.release.location>${sdk.repository.location}/release</sdk.repository.release.location>
+        <sdk.repository.snapshot.location>${sdk.repository.location}/snapshot</sdk.repository.snapshot.location>
+
+        <sdk.repository.local.location>/tmp/repository/maven/metrics-cloudwatch-library</sdk.repository.local.location>
+        <sdk.repository.release.local.location>${sdk.repository.local.location}/release</sdk.repository.release.local.location>
+        <sdk.repository.snapshot.local.location>${sdk.repository.local.location}/snapshot</sdk.repository.snapshot.local.location>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven.plugin.maven-enforcer-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>[${maven.version},)</version>
+                                    <message>Check for Maven version &gt;=${maven.version} failed. Update your Maven install.</message>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>${maven.plugin.versions-maven-plugin.version}</version>
+                <configuration>
+                    <allowSnapshots>true</allowSnapshots>
+                    <!--<excludeReactor>false</excludeReactor>-->
+                    <includes>
+                        <include>com.tplinkra:*</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.plugin.maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.source.version}</source>
+                    <target>${java.target.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>${maven.plugin.maven-clean-plugin.version}</version>
+                <configuration>
+                    <failOnError>true</failOnError>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>external.atlassian.jgitflow</groupId>
+                <artifactId>jgitflow-maven-plugin</artifactId>
+                <version>${maven.plugin.jgitflow-maven-plugin.version}</version>
+                <configuration>
+                    <allowSnapshots>true</allowSnapshots>
+                    <defaultOriginUrl>ssh://git@github.com:tpradev/metrics-cloudwatch.git</defaultOriginUrl>
+                    <enableSshAgent>true</enableSshAgent>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <pushFeatures>true</pushFeatures>
+                    <pushReleases>true</pushReleases>
+                    <pushHotfixes>true</pushHotfixes>
+                    <allowUntracked>true</allowUntracked>
+                    <noDeploy>true</noDeploy>
+                </configuration>
+            </plugin>
+        </plugins>
+        <extensions>
+            <extension>
+                <groupId>org.kuali.maven.wagons</groupId>
+                <artifactId>maven-s3-wagon</artifactId>
+                <version>1.2.1</version>
+            </extension>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-file</artifactId>
+                <version>${maven.extension.file-wagon.version}</version>
+            </extension>
+        </extensions>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>development</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>release.repository.local.tplinkra.com</id>
+                    <name>Metrics CloudWatch Snapshot Repository</name>
+                    <url>file:${sdk.repository.snapshot.local.location}</url>
+                </snapshotRepository>
+                <repository>
+                    <id>snapshot.repository.local.tplinkra.com</id>
+                    <name>Metrics CloudWatch Release Repository</name>
+                    <url>file:${sdk.repository.release.local.location}</url>
+                </repository>
+            </distributionManagement>
+            <repositories>
+                <repository>
+                    <id>release.repository.local.tplinkra.com</id>
+                    <url>file:${sdk.repository.release.local.location}</url>
+                </repository>
+                <repository>
+                    <id>snapshot.repository.local.tplinkra.com</id>
+                    <url>file:${sdk.repository.snapshot.local.location}</url>
+                </repository>
+            </repositories>
+        </profile>
+        <profile>
+            <id>release</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>snapshot.repository.tplinkra.com</id>
+                    <name>Metrics CloudWatch Snapshot Repository</name>
+                    <url>${sdk.repository.snapshot.location}</url>
+                </snapshotRepository>
+                <repository>
+                    <id>release.repository.tplinkra.com</id>
+                    <name>Metrics CloudWatch Release Repository</name>
+                    <url>${sdk.repository.release.location}</url>
+                </repository>
+            </distributionManagement>
+            <repositories>
+                <repository>
+                    <id>snapshot.repository.tplinkra.com</id>
+                    <url>${sdk.repository.snapshot.location}</url>
+                </repository>
+                <repository>
+                    <id>release.repository.tplinkra.com</id>
+                    <url>${sdk.repository.release.location}</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
 </project>

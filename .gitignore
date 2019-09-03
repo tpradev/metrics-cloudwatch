@@ -1,6 +1,7 @@
 #java specific
 *.class
 .gradle/*
+target
 
 build/
 out/
