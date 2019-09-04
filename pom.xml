@@ -51,7 +51,7 @@
     </dependencies>
 
     <properties>
-        <!-- Maven Properties-->
+        <!-- Maven Properties -->
         <maven.version>3.3.9</maven.version>
 
         <!-- Plugin Properties -->
