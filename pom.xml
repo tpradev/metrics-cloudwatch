@@ -78,8 +78,10 @@
         <sdk.repository.snapshot.location>${sdk.repository.location}/snapshot</sdk.repository.snapshot.location>
 
         <sdk.repository.local.location>/tmp/repository/maven/metrics-cloudwatch-library</sdk.repository.local.location>
-        <sdk.repository.release.local.location>${sdk.repository.local.location}/release</sdk.repository.release.local.location>
-        <sdk.repository.snapshot.local.location>${sdk.repository.local.location}/snapshot</sdk.repository.snapshot.local.location>
+        <sdk.repository.release.local.location>${sdk.repository.local.location}/release
+        </sdk.repository.release.local.location>
+        <sdk.repository.snapshot.local.location>${sdk.repository.local.location}/snapshot
+        </sdk.repository.snapshot.local.location>
     </properties>
 
     <build>
@@ -98,7 +100,9 @@
                             <rules>
                                 <requireMavenVersion>
                                     <version>[${maven.version},)</version>
-                                    <message>Check for Maven version &gt;=${maven.version} failed. Update your Maven install.</message>
+                                    <message>Check for Maven version &gt;=${maven.version} failed. Update your Maven
+                                        install.
+                                    </message>
                                 </requireMavenVersion>
                             </rules>
                         </configuration>
@@ -137,6 +141,13 @@
                 <groupId>external.atlassian.jgitflow</groupId>
                 <artifactId>jgitflow-maven-plugin</artifactId>
                 <version>${maven.plugin.jgitflow-maven-plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.jcraft</groupId>
+                        <artifactId>jsch</artifactId>
+                        <version>0.1.54</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
                     <allowSnapshots>true</allowSnapshots>
                     <defaultOriginUrl>git@github.com:tpradev/metrics-cloudwatch.git</defaultOriginUrl>
