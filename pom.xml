@@ -6,7 +6,7 @@
     <groupId>com.blacklocus</groupId>
     <artifactId>metrics-cloudwatch-library</artifactId>
     <packaging>jar</packaging>
-    <version>0.4.1</version>
+    <version>0.4.2-SNAPSHOT</version>
     <dependencies>
         <dependency>
             <groupId>com.amazonaws</groupId>
