@@ -62,6 +62,8 @@
         <maven.plugin.maven-clean-plugin.version>3.0.0</maven.plugin.maven-clean-plugin.version>
         <maven.plugin.maven-jar-plugin.version>2.4</maven.plugin.maven-jar-plugin.version>
         <maven.plugin.maven-surefire-plugin.version>2.19.1</maven.plugin.maven-surefire-plugin.version>
+        <maven.plugin.maven-compiler-plugin.version>3.5.1</maven.plugin.maven-compiler-plugin.version>
+        <maven.plugin.jgitflow-maven-plugin.version>1.0-m5.1</maven.plugin.jgitflow-maven-plugin.version>
 
         <!-- Java Source and Target Versions-->
         <java.source.version>1.6</java.source.version>
