@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.blacklocus</groupId>
     <artifactId>metrics-cloudwatch-library</artifactId>
     <packaging>jar</packaging>
-    <version>0.4.1</version>
+    <version>0.4.4</version>
     <dependencies>
         <dependency>
             <groupId>com.amazonaws</groupId>
@@ -53,7 +51,7 @@
     </dependencies>
 
     <properties>
-        <!-- Maven Properties-->
+        <!-- Maven Properties -->
         <maven.version>3.3.9</maven.version>
 
         <!-- Plugin Properties -->
@@ -78,8 +76,10 @@
         <sdk.repository.snapshot.location>${sdk.repository.location}/snapshot</sdk.repository.snapshot.location>
 
         <sdk.repository.local.location>/tmp/repository/maven/metrics-cloudwatch-library</sdk.repository.local.location>
-        <sdk.repository.release.local.location>${sdk.repository.local.location}/release</sdk.repository.release.local.location>
-        <sdk.repository.snapshot.local.location>${sdk.repository.local.location}/snapshot</sdk.repository.snapshot.local.location>
+        <sdk.repository.release.local.location>${sdk.repository.local.location}/release
+        </sdk.repository.release.local.location>
+        <sdk.repository.snapshot.local.location>${sdk.repository.local.location}/snapshot
+        </sdk.repository.snapshot.local.location>
     </properties>
 
     <build>
@@ -98,7 +98,9 @@
                             <rules>
                                 <requireMavenVersion>
                                     <version>[${maven.version},)</version>
-                                    <message>Check for Maven version &gt;=${maven.version} failed. Update your Maven install.</message>
+                                    <message>Check for Maven version &gt;=${maven.version} failed. Update your Maven
+                                        install.
+                                    </message>
                                 </requireMavenVersion>
                             </rules>
                         </configuration>
@@ -137,9 +139,16 @@
                 <groupId>external.atlassian.jgitflow</groupId>
                 <artifactId>jgitflow-maven-plugin</artifactId>
                 <version>${maven.plugin.jgitflow-maven-plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.jcraft</groupId>
+                        <artifactId>jsch</artifactId>
+                        <version>0.1.54</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
                     <allowSnapshots>true</allowSnapshots>
-                    <defaultOriginUrl>ssh://git@github.com:tpradev/metrics-cloudwatch.git</defaultOriginUrl>
+                    <defaultOriginUrl>git@github.com:tpradev/metrics-cloudwatch.git</defaultOriginUrl>
                     <enableSshAgent>true</enableSshAgent>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <pushFeatures>true</pushFeatures>
