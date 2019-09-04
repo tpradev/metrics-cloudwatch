@@ -139,7 +139,7 @@
                 <version>${maven.plugin.jgitflow-maven-plugin.version}</version>
                 <configuration>
                     <allowSnapshots>true</allowSnapshots>
-                    <defaultOriginUrl>https://github.com/tpradev/metrics-cloudwatch.git</defaultOriginUrl>
+                    <defaultOriginUrl>git@github.com:tpradev/metrics-cloudwatch.git</defaultOriginUrl>
                     <enableSshAgent>true</enableSshAgent>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <pushFeatures>true</pushFeatures>
