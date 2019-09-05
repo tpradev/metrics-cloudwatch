@@ -361,18 +361,17 @@ public class CloudWatchReporter extends ScheduledReporter {
         Counting metric = entry.getValue();
         final long diff = diffLast(metric);
         if (diff == 0) {
+            // Don't submit metrics that have not changed. No reason to keep these alive. Also saves on CloudWatch
+            // costs.
             return;
         }
 
         String groupedName = entry.getKey();
         String counterName;
-        final String timestamp;
         if (StringUtils.contains(groupedName, NAME_SAMPLING_TOKEN)) {
             counterName = StringUtils.substringBetween(groupedName, NAME_COUNTER_TOKEN, NAME_SAMPLING_TOKEN);
-            timestamp = StringUtils.substringBetween(groupedName, NAME_TIMESTAMP_TOKEN, NAME_UNIT_TOKEN);
         } else {
             counterName = StringUtils.substringBetween(groupedName, NAME_COUNTER_TOKEN, NAME_METRIC_DIMENSION_SEPARATOR);
-            timestamp = StringUtils.substringAfterLast(groupedName, NAME_TIMESTAMP_TOKEN);
         }
 
         if (counterName == null || counterName.equals("null")) {
@@ -380,18 +379,18 @@ public class CloudWatchReporter extends ScheduledReporter {
         }
 
         String dimensions = StringUtils.substringBetween(groupedName, NAME_METRIC_DIMENSION_SEPARATOR, NAME_STORAGE_RESOLUTION_TOKEN);
-        final String resolution = StringUtils.substringBetween(groupedName, NAME_STORAGE_RESOLUTION_TOKEN, NAME_TIMESTAMP_TOKEN);
+        final String resolution = StringUtils.substringBetween(groupedName, NAME_STORAGE_RESOLUTION_TOKEN, NAME_METRIC_DIMENSION_SEPARATOR);
 
         String nameAndDimensions = counterName + NAME_TOKEN_DELIMITER + dimensions;
 
         DemuxedKey key = new DemuxedKey(appendGlobalDimensions(nameAndDimensions));
+
         Iterables.addAll(data, key.newDatums(new Function<MetricDatum, MetricDatum>() {
             @Override
             public MetricDatum apply(MetricDatum datum) {
                 return datum.withValue((double) diff)
                         .withUnit(StandardUnit.Count)
-                        .withStorageResolution(Integer.valueOf(resolution))
-                        .withTimestamp(new Date(Long.parseLong(timestamp)));
+                        .withStorageResolution(Integer.valueOf(resolution));
             }
         }));
     }
@@ -412,8 +411,7 @@ public class CloudWatchReporter extends ScheduledReporter {
         String groupedName = entry.getKey();
         String samplingName = StringUtils.substringBetween(groupedName, NAME_SAMPLING_TOKEN, NAME_METRIC_DIMENSION_SEPARATOR);
         String dimensions = StringUtils.substringBetween(groupedName, NAME_METRIC_DIMENSION_SEPARATOR, NAME_STORAGE_RESOLUTION_TOKEN);
-        final String resolution = StringUtils.substringBetween(groupedName, NAME_STORAGE_RESOLUTION_TOKEN, NAME_TIMESTAMP_TOKEN);
-        final String timestamp = StringUtils.substringBetween(groupedName, NAME_TIMESTAMP_TOKEN, NAME_UNIT_TOKEN);
+        final String resolution = StringUtils.substringBetween(groupedName, NAME_STORAGE_RESOLUTION_TOKEN, NAME_METRIC_DIMENSION_SEPARATOR);
         final String unit = StringUtils.substringAfterLast(groupedName, NAME_UNIT_TOKEN);
 
         String nameAndDimensions = samplingName + NAME_TOKEN_DELIMITER + dimensions;
@@ -423,8 +421,7 @@ public class CloudWatchReporter extends ScheduledReporter {
             @Override
             public MetricDatum apply(MetricDatum datum) {
                 return datum.withStatisticValues(statisticSet).withUnit(unit)
-                        .withStorageResolution(Integer.valueOf(resolution))
-                        .withTimestamp(new Date(Long.parseLong(timestamp)));
+                        .withStorageResolution(Integer.valueOf(resolution));
             }
         }));
     }
