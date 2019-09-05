@@ -4,7 +4,7 @@
     <groupId>com.blacklocus</groupId>
     <artifactId>metrics-cloudwatch-library</artifactId>
     <packaging>jar</packaging>
-    <version>0.4.7</version>
+    <version>0.4.8</version>
     <dependencies>
         <dependency>
             <groupId>com.amazonaws</groupId>
@@ -175,16 +175,16 @@
         <profile>
             <id>development</id>
             <distributionManagement>
-                <snapshotRepository>
-                    <id>release.repository.local.tplinkra.com</id>
-                    <name>Metrics CloudWatch Snapshot Repository</name>
-                    <url>file:${sdk.repository.snapshot.local.location}</url>
-                </snapshotRepository>
                 <repository>
-                    <id>snapshot.repository.local.tplinkra.com</id>
+                    <id>release.repository.local.tplinkra.com</id>
                     <name>Metrics CloudWatch Release Repository</name>
                     <url>file:${sdk.repository.release.local.location}</url>
                 </repository>
+                <snapshotRepository>
+                    <id>snapshot.repository.local.tplinkra.com</id>
+                    <name>Metrics CloudWatch Snapshot Repository</name>
+                    <url>file:${sdk.repository.snapshot.local.location}</url>
+                </snapshotRepository>
             </distributionManagement>
             <repositories>
                 <repository>
