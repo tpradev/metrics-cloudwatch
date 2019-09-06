@@ -263,7 +263,6 @@ public class CloudWatchReporter extends ScheduledReporter {
                 reportCounter(meterEntry, data);
             }
             for (Map.Entry<String, Histogram> histogramEntry : histograms.entrySet()) {
-                reportCounter(histogramEntry, data);
                 reportSampling(histogramEntry, 1.0, data);
             }
             for (Map.Entry<String, Timer> timerEntry : timers.entrySet()) {
