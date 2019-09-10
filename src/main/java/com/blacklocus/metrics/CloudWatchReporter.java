@@ -266,7 +266,6 @@ public class CloudWatchReporter extends ScheduledReporter {
                 reportSampling(histogramEntry, 1.0, data);
             }
             for (Map.Entry<String, Timer> timerEntry : timers.entrySet()) {
-                reportCounter(timerEntry, data);
                 reportSampling(timerEntry, 0.000001, data); // nanos -> millis
             }
 
@@ -367,10 +366,13 @@ public class CloudWatchReporter extends ScheduledReporter {
 
         String groupedName = entry.getKey();
         String counterName;
+        final String timestamp;
         if (StringUtils.contains(groupedName, NAME_SAMPLING_TOKEN)) {
             counterName = StringUtils.substringBetween(groupedName, NAME_COUNTER_TOKEN, NAME_SAMPLING_TOKEN);
+            timestamp = StringUtils.substringBetween(groupedName, NAME_TIMESTAMP_TOKEN, NAME_UNIT_TOKEN);
         } else {
             counterName = StringUtils.substringBetween(groupedName, NAME_COUNTER_TOKEN, NAME_METRIC_DIMENSION_SEPARATOR);
+            timestamp = StringUtils.substringBetween(groupedName, NAME_TIMESTAMP_TOKEN, NAME_UNIT_TOKEN);
         }
 
         if (counterName == null || counterName.equals("null")) {
@@ -389,7 +391,8 @@ public class CloudWatchReporter extends ScheduledReporter {
             public MetricDatum apply(MetricDatum datum) {
                 return datum.withValue((double) diff)
                         .withUnit(StandardUnit.Count)
-                        .withStorageResolution(Integer.valueOf(resolution));
+                        .withStorageResolution(Integer.valueOf(resolution))
+                        .withTimestamp(new Date(Long.parseLong(timestamp)));
             }
         }));
     }
@@ -411,6 +414,7 @@ public class CloudWatchReporter extends ScheduledReporter {
         String samplingName = StringUtils.substringBetween(groupedName, NAME_SAMPLING_TOKEN, NAME_METRIC_DIMENSION_SEPARATOR);
         String dimensions = StringUtils.substringBetween(groupedName, NAME_METRIC_DIMENSION_SEPARATOR, NAME_STORAGE_RESOLUTION_TOKEN);
         final String resolution = StringUtils.substringBetween(groupedName, NAME_STORAGE_RESOLUTION_TOKEN, NAME_METRIC_DIMENSION_SEPARATOR);
+        final String timestamp = StringUtils.substringBetween(groupedName, NAME_TIMESTAMP_TOKEN, NAME_UNIT_TOKEN);
         final String unit = StringUtils.substringAfterLast(groupedName, NAME_UNIT_TOKEN);
 
         String nameAndDimensions = samplingName + NAME_TOKEN_DELIMITER + dimensions;
@@ -420,7 +424,8 @@ public class CloudWatchReporter extends ScheduledReporter {
             @Override
             public MetricDatum apply(MetricDatum datum) {
                 return datum.withStatisticValues(statisticSet).withUnit(unit)
-                        .withStorageResolution(Integer.valueOf(resolution));
+                        .withStorageResolution(Integer.valueOf(resolution))
+                        .withTimestamp(new Date(Long.parseLong(timestamp)));
             }
         }));
     }
