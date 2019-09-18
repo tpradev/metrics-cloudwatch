@@ -106,9 +106,10 @@ public class CloudWatchReporter extends ScheduledReporter {
     public static final String VALID_DIMENSION_PART_RGX = Constants.VALID_DIMENSION_PART_RGX;
 
 
-
     @Deprecated
     static final MetricFilter ALL = MetricFilter.ALL;
+
+    private final MetricRegistry currentRegistry;
 
 
     /**
@@ -192,7 +193,7 @@ public class CloudWatchReporter extends ScheduledReporter {
                               AmazonCloudWatchAsync cloudWatch) {
 
         super(registry, "CloudWatchReporter:" + metricNamespace, metricFilter, TimeUnit.MINUTES, TimeUnit.MINUTES);
-
+        this.currentRegistry = registry;
         this.metricNamespace = metricNamespace;
         this.cloudWatch = cloudWatch;
     }
@@ -247,6 +248,9 @@ public class CloudWatchReporter extends ScheduledReporter {
                        SortedMap<String, Timer> timers) {
 
         try {
+            // Reset the registry to avoid memory leak. If not reset, the size of concurrent hashmap increases exponentially
+           currentRegistry.removeMatching(MetricFilter.ALL);
+
             // Just an estimate to reduce resizing.
             List<MetricDatum> data = new ArrayList<MetricDatum>(
                     gauges.size() + counters.size() + meters.size() + 2 * histograms.size() + 2 * timers.size()
